@@ -1,0 +1,22 @@
+name: Notifier
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  notifyTelegram:
+    runs-on: ubuntu-latest
+    steps:
+      - name: send custom message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Frontend
+            ${{ github.actor }} сделал ${{ github.event_name }}: ${{ github.event.commits[0].message }}.
+            Обновите репозиторий до актуальной версии прежде, чем продолжить работу.
