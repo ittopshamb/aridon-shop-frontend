@@ -6,6 +6,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
 import LoginPage from "../../features/auth/LoginPage";
+import {Routes, BrowserRouter as Router, Route} from 'react-router-dom';
+import ProductsPage from "../../features/catalog/ProductsPage";
+import NotfoundPage from "../../features/NotfoundPage";
+import {Login} from "@mui/icons-material";
+
 
 const sections = [
   { title: 'Technology', url: '#' },
@@ -29,13 +34,20 @@ export default function MainLayout() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header />
-        <main>
-          <Grid container spacing={5} sx={{ mt: 3 }}>
-            {/*подставляется страница, которая выбрана на текущий момент: */}
-            <LoginPage />
-          </Grid>
-        </main>
+        <Router>
+            <Header />
+            <main>
+              <Grid container spacing={5} sx={{ mt: 3 }}>
+                {/*подставляется страница, которая выбрана на текущий момент: */}
+                {/*<LoginPage />*/}
+              </Grid>
+            </main>
+            <Routes>
+                <Route path="/Products" element={<ProductsPage/>}/>
+                <Route path="/" element={<LoginPage/>}/>
+                <Route path="*" element={<NotfoundPage/>}/>
+            </Routes>
+        </Router>
       </Container>
       <Footer
         title="Footer"
