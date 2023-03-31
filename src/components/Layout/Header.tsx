@@ -12,7 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
+import {Routes, BrowserRouter as Router, Route, Link, useRoutes} from 'react-router-dom';
+import ProductsPage from '../../features/Catalog/ProductsPage';
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -27,7 +28,7 @@ function ResponsiveAppBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (page) => {
         setAnchorElNav(null);
     };
 
@@ -35,6 +36,19 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    // const publicRoutes = [
+    //     {
+    //         path: '/products',
+    //         component: ProductsPage
+    //     }
+    // ]
+    // const header = () => {
+    //     let routes = useRoutes([
+    //         {path: '/products', element: <ProductsPage/>}
+    //     ])
+    //     return routes;
+    // }
+    
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -113,18 +127,19 @@ function ResponsiveAppBar() {
                     >
                         LOGO
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                            >
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
-
+                    <Router>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            {pages.map((page) => (
+                                <Link key={page} to={`/${page}`} 
+                                      sx={{ my: 2, color: 'white', display: 'block' }}>
+                                    {page}
+                                </Link>
+                            ))}
+                        </Box>
+                        <Routes>
+                            <Route path="/Products" element={<ProductsPage/>}/>
+                        </Routes>
+                    </Router>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
