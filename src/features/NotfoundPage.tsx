@@ -4,7 +4,7 @@ import * as React from "react";
 export default function NotfoundPage() {
     return (
         <div>
-            This page doesn't exist. Go <Link to="/">Login</Link>
+            This page doesn't exist. Go <Link to="/Login">Login</Link>
         </div>
     );
 }
