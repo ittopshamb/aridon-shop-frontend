@@ -10,6 +10,7 @@ import {Routes, BrowserRouter as Router, Route} from 'react-router-dom';
 import ProductsPage from "../../features/catalog/ProductsPage";
 import NotfoundPage from "../../features/NotfoundPage";
 import {Login} from "@mui/icons-material";
+import SignupPage from "../../features/auth/SignupPage";
 
 
 const sections = [
@@ -44,7 +45,8 @@ export default function MainLayout() {
             </main>
             <Routes>
                 <Route path="/Products" element={<ProductsPage/>}/>
-                <Route path="/" element={<LoginPage/>}/>
+                <Route path="/Login" element={<LoginPage/>}/>
+                <Route path="/Signup" element={<SignupPage/>}/>
                 <Route path="*" element={<NotfoundPage/>}/>
             </Routes>
         </Router>
