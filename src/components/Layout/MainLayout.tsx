@@ -6,30 +6,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
 import LoginPage from "../../features/auth/LoginPage";
-import {Routes, BrowserRouter as Router, Route} from 'react-router-dom';
+import { Routes, BrowserRouter as Router, Route } from 'react-router-dom';
 import CategoriesPage from "../../features/catalog/CategoriesPage";
 import NotfoundPage from "../../features/NotfoundPage";
-import {Login} from "@mui/icons-material";
 import SignupPage from "../../features/auth/SignupPage";
 import ProductsPage from "../../features/catalog/ProductsPage";
-
-
-const sections = [
-    { title: 'Technology', url: '#' },
-    { title: 'Design', url: '#' },
-    { title: 'Culture', url: '#' },
-    { title: 'Business', url: '#' },
-    { title: 'Politics', url: '#' },
-    { title: 'Opinion', url: '#' },
-    { title: 'Science', url: '#' },
-    { title: 'Health', url: '#' },
-    { title: 'Style', url: '#' },
-    { title: 'Travel', url: '#' },
-];
-
-
+import AccountPage from "../../features/auth/AccountInfoPage";
+import ProductCardPage from "../../features/catalog/ProductCardPage";
+import CartPage from "../../features/ordering/CartPage";
 
 const theme = createTheme();
+
 
 export default function MainLayout() {
     return (
@@ -48,8 +35,11 @@ export default function MainLayout() {
                         <Route path="/Categories" element={<CategoriesPage/>}/>
                         <Route path="/Products" element={<ProductsPage/>} />
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
+                        <Route path="/Product/:productId" element={<ProductCardPage/>} />
                         <Route path="/Login" element={<LoginPage/>}/>
                         <Route path="/Signup" element={<SignupPage/>}/>
+                        <Route path="/Account" element={<AccountPage />}/>
+                        <Route path="/Cart" element={<CartPage />}/>
                         <Route path="*" element={<NotfoundPage/>}/>
                     </Routes>
                 </Router>
