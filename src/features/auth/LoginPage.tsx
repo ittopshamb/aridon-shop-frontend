@@ -61,7 +61,6 @@ export default function LoginPage() {
                     fullWidth
                     id="email"
                     label="Email Address"
-                    name="email"
                     autoComplete="email"
                     autoFocus
                     {...register("email")}
@@ -70,7 +69,6 @@ export default function LoginPage() {
                     margin="normal"
                     required
                     fullWidth
-                    name="password"
                     label="Password"
                     type="password"
                     id="password"
@@ -88,7 +86,7 @@ export default function LoginPage() {
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link to="/signup" variant="body2">
+                        <Link href="/signup" variant="body2">
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
