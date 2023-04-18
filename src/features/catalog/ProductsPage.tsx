@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import {List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 type Product = {
     productId: string;
@@ -40,10 +40,12 @@ const ProductsPage = () => {
     const currentProducts = products
         .slice(offset, offset + perPage)
         .map((product) => (
-            <ListItem key={product.productId}>
-                <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
-                <ListItemText primary={product.productName} secondary={`$${product.price}`} />
-            </ListItem>
+            <Link to={`/product/${product.productId}`}>
+                <ListItem key={product.productId}>
+                    <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
+                    <ListItemText primary={product.productName} secondary={`$${product.price}`} />
+                </ListItem>
+            </Link>
         ));
 
     return (
