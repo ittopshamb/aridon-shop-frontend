@@ -16,7 +16,7 @@ type Product = {
     categoryId: string;
 };
 
-const ProductCardPage = () => {
+export default function ProductCardPage(): JSX.Element {
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
@@ -25,7 +25,6 @@ const ProductCardPage = () => {
     
     if (!token) {
         navigate("/login");
-        return;
     }
 
     const headers = {
@@ -89,4 +88,4 @@ const ProductCardPage = () => {
     );
 };
 
-export default ProductCardPage;
+// export default ProductCardPage;
