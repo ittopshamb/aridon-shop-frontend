@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
 const pages = ['Categories', 'Pricing', 'Blog',];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
@@ -35,7 +35,7 @@ function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -114,7 +114,7 @@ function ResponsiveAppBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Link style={{color: "white", margin:"10px"}} key={page} to={`/${page}`}
+                            <Link className={"link"} key={page} to={`/${page}`}
                                   // sx={{ my: 2, color: 'white', display: 'block' }}
                             >
                                 {page}
@@ -145,7 +145,12 @@ function ResponsiveAppBar() {
                         >
                             {settings.map((setting) => (
                                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                    {/*<Typography textAlign="center">{setting}</Typography>*/}
+                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}
+                                        // sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                        {setting}
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
