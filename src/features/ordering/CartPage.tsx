@@ -6,8 +6,9 @@ import {
     CardContent,
     CardMedia,
     Typography,
-    Button
+    Button, styled, Stack, Pagination, List, ListItem
 } from '@mui/material';
+import {fakeProducts} from "../catalog/FakeProducts";
 
 type CartItem = {
     id: string;
@@ -26,7 +27,10 @@ type Product = {
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
+    const [pageCount, setPageCount] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const token = localStorage.getItem("token");
+    const perPage = 10;
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -50,6 +54,7 @@ const CartPage = () => {
             );
             const data = await Promise.all(response.map(res => res.json()));
             setProducts(data);
+            setPageCount(Math.ceil(data.length / perPage));
         };
         if (cartItems.length > 0) {
             fetchProducts();
@@ -87,6 +92,9 @@ const CartPage = () => {
         }
         return total;
     };
+    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setCurrentPage(value - 1);
+    };
     
     return (
         <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center'}} maxWidth="sm">
@@ -120,16 +128,41 @@ const CartPage = () => {
                     return null;
                 }
             })}
-            <Box sx={{ margin: '10px'}}>
+            <List sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',marginLeft: '190px'}}>
+
+                <ListItem>
+            <Box >
                 <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
                     Total Price: ${getTotalPrice()}
                 </Typography>
             </Box>
-            <Button variant="contained" sx={{ marginTop: '20px', height: '40px' }}>
+                </ListItem>
+            <ListItem>
+            <Button variant="contained" sx={{ marginTop: '20px', height: '40px' ,marginLeft:'35px'}}>
                 Buy
             </Button>
+
+            </ListItem>
+            <ListItem>
+            <StyledStack sx={{ marginLeft: '30px'}}spacing={2}>
+                <Pagination
+                    count={pageCount}
+                    variant="outlined"
+                    shape="rounded"
+                    page={currentPage + 1}
+                    onChange={handlePageChange}
+                />
+            </StyledStack>
+            </ListItem>
+           </List>
         </Container>
     );
 };
+const StyledStack = styled(Stack)({
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "16px",
+});
 
 export default CartPage;
