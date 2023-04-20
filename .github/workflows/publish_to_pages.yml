@@ -1,12 +1,10 @@
-# https://vitejs.dev/guide/static-deploy.html#github-pages
-
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['master']
+    branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,7 +25,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: /
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,6 +41,10 @@ jobs:
         run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          path: '/'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
