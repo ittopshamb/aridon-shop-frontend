@@ -1,7 +1,20 @@
 ﻿import React, { useEffect, useState } from 'react';
+
 import {useNavigate, useParams} from 'react-router-dom';
-import {Container, Card, CardContent, CardMedia, Typography, Button, TextField} from '@mui/material';
+import {
+    Container,
+    Card,
+    CardContent,
+    CardMedia,
+    Typography,
+    Button,
+    TextField,
+    List,
+    Pagination,
+    styled, Stack
+} from '@mui/material';
 import axios from "axios";
+import {fakeProducts} from "./FakeProducts";
 
 const api = axios.create({
     baseURL: "http://localhost:7079",
@@ -16,12 +29,14 @@ type Product = {
     categoryId: string;
 };
 
-export default function ProductCardPage(): JSX.Element {
+export default function ProductCardPage():JSX.Element{
     const { productId } = useParams<{ productId: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
+
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+
     
     if (!token) {
         navigate("/login");
@@ -36,9 +51,11 @@ export default function ProductCardPage(): JSX.Element {
             const response = await fetch(`http://localhost:7079/products/get_by_id?id=${productId}`);
             const data = await response.json();
             setProduct(data);
+
         };
         fetchProduct();
     }, [productId]);
+
 
     const handleAddToCart = async () => {
         try {
@@ -56,6 +73,7 @@ export default function ProductCardPage(): JSX.Element {
     if (!product) {
         return <div>Loading product...</div>;
     }
+
 
     return (
         <Container maxWidth="sm">
@@ -82,10 +100,16 @@ export default function ProductCardPage(): JSX.Element {
                     <Button variant="contained" sx={{ marginTop: '20px', marginLeft: '10px', height: '30px' }} onClick={handleAddToCart}>
                         Add to Cart
                     </Button>
+
                 </CardContent>
+
             </Card>
+
+
+
         </Container>
+
     );
-};
+}
 
 // export default ProductCardPage;
