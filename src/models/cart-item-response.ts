@@ -35,10 +35,4 @@ export interface CartItemResponse {
      * @memberof CartItemResponse
      */
     quantity?: number;
-    /**
-     *
-     * @type {number}
-     * @memberof CartItemResponse
-     */
-    price?: number;
 }

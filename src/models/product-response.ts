@@ -28,7 +28,7 @@ export interface ProductResponse {
      * @type {string}
      * @memberof ProductResponse
      */
-    productName?: string ;
+    productName?: string | null;
     /**
      * 
      * @type {number}
@@ -40,7 +40,7 @@ export interface ProductResponse {
      * @type {string}
      * @memberof ProductResponse
      */
-    image?: string;
+    image?: string | null;
     /**
      * 
      * @type {string}
