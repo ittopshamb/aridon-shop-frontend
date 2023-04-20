@@ -1,8 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import {List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
 import {Link, useParams} from 'react-router-dom';
-import {fakeProducts} from "./FakeProducts";
-
 
 type Product = {
     productId: string;
@@ -39,8 +37,7 @@ const ProductsPage = () => {
 
     const offset = currentPage * perPage;
 
-    // const currentProducts =fakeProducts
-    const currentProducts =products
+    const currentProducts = products
         .slice(offset, offset + perPage)
         .map((product) => (
             <Link key={product.productId} to={`/product/${product.productId}`}>
