@@ -23,7 +23,7 @@ export default function MainLayout() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Container maxWidth="lg">
-                <Router>
+                <Router basename={import.meta.env.BASE_URL}>
                     <Header />
                     <main>
                         <Grid container spacing={5} sx={{ mt: 3 }}>

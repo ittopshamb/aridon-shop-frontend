@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        ARIDON
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
