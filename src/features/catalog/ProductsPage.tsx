@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import {List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
+import {Button, List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
 import {Link, useParams} from 'react-router-dom';
 
 type Product = {
@@ -10,6 +10,7 @@ type Product = {
     description: string;
     categoryId: string;
 };
+
 
 const ProductsPage = () => {
     const { categoryId } = useParams<{ categoryId: string }>();
@@ -36,7 +37,7 @@ const ProductsPage = () => {
     };
 
     const offset = currentPage * perPage;
-
+    
     const currentProducts = products
         .slice(offset, offset + perPage)
         .map((product) => (
