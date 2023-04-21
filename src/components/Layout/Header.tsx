@@ -12,8 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Categories', 'Cart'];
+const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
@@ -33,30 +33,23 @@ function ResponsiveAppBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-    
+
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                    <Link className={"link"} to="/" style={{
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                    }}
                     >
-                        LOGO
-                    </Typography>
-
+                        ARIDON
+                    </Link>
+                    
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
@@ -112,15 +105,15 @@ function ResponsiveAppBar() {
                     >
                         LOGO
                     </Typography>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map((page) => (
-                                <Link style={{color: "white", margin:"10px"}} key={page} to={`/${page}`} 
-                                      // sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    {page}
-                                </Link>
-                            ))}
-                        </Box>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page) => (
+                            <Link className={"link"} key={page} to={`/${page}`}
+                                  // sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                {page}
+                            </Link>
+                        ))}
+                    </Box>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -145,7 +138,12 @@ function ResponsiveAppBar() {
                         >
                             {settings.map((setting) => (
                                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                    {/*<Typography textAlign="center">{setting}</Typography>*/}
+                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}
+                                        // sx={{ my: 2, color: 'white', display: 'block' }}
+                                    >
+                                        {setting}
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
