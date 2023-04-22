@@ -66,6 +66,7 @@ const AddProduct = () => {
             try {
                 const categoriesResponse = await api.get("/categories/get_all", { headers });
                 const categories = categoriesResponse.data.categories;
+                console.log(categories);
                 setCategories(categories);
             } catch {
                 alert("Cannot get categories, please refresh page!")
@@ -89,7 +90,8 @@ const AddProduct = () => {
 
     const handleSubmit = useCallback(async () => {
         try {
-            await api.post(`/products/add?Name=${product.name}&Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, {
+            await api.post(`/products/add?Name=${product.name}&Price=${product.price}&Image=${product.image}
+            &Description=${product.description}&CategoryId=${product.categoryId}`, {
                 headers
             })
         } catch {

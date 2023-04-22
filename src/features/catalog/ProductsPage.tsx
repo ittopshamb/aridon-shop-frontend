@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import {List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
+import {Button, IconButton, List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
 import {Link, useParams} from 'react-router-dom';
 
 type Product = {
@@ -16,14 +16,17 @@ const ProductsPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
-
+    const token = localStorage.getItem("token");
+    
     const perPage = 10;
 
     useEffect(() => {
         const fetchProducts = async () => {
             const response = await fetch(
-                `http://localhost:7079/products/get_by_category?categoryId=${categoryId}`
-            );
+                `http://localhost:7079/products/get_by_category?categoryId=${categoryId}`,{
+               headers: {
+                    Authorization: `Bearer ${token}`},
+                });
             const data = await response.json();
             setProducts(data.products);
             setPageCount(Math.ceil(data.products.length / perPage));
@@ -31,12 +34,22 @@ const ProductsPage = () => {
         fetchProducts();
     }, [categoryId]);
 
+    const handledRemoveProduct = async (productId: string) => {
+        await fetch(`http://localhost:7079/products/delete_by_id?id=${productId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        setProducts(prevProducts => prevProducts.filter(product => product.productId !== productId));
+    };
+    
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value - 1);
     };
 
     const offset = currentPage * perPage;
-
+    
     const currentProducts = products
         .slice(offset, offset + perPage)
         .map((product) => (
@@ -44,10 +57,13 @@ const ProductsPage = () => {
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`$${product.price}`} />
+                    <RemoveButton onClick={() => handledRemoveProduct(product.productId)}>
+                        Remove
+                    </RemoveButton>
                 </ListItem>
             </Link>
         ));
-
+    
     return (
         <div>
             <List>{currentProducts}</List>
@@ -70,5 +86,10 @@ const StyledStack = styled(Stack)({
     alignItems: "center",
     marginTop: "16px",
 });
-
+const RemoveButton = styled(Button)({
+    color: "#f44336",
+    "&:hover": {
+        backgroundColor: "#f44336",
+        color: "#fff"
+    }});
 export default ProductsPage;
