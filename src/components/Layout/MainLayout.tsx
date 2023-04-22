@@ -14,6 +14,7 @@ import ProductsPage from "../../features/catalog/ProductsPage";
 import AccountPage from "../../features/auth/AccountInfoPage";
 import ProductCardPage from "../../features/catalog/ProductCardPage";
 import CartPage from "../../features/ordering/CartPage";
+import AddproductPage from "../../features/AdminAuthority/AddproductPage";
 
 const theme = createTheme();
 
@@ -36,6 +37,7 @@ export default function MainLayout() {
                         <Route path="/Products" element={<ProductsPage/>} />
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
                         <Route path="/Product/:productId" element={<ProductCardPage/>} />
+                        <Route path="/ProductAdd" element={<AddproductPage/>} />
                         <Route path="/Login" element={<LoginPage/>}/>
                         <Route path="/Signup" element={<SignupPage/>}/>
                         <Route path="/Account" element={<AccountPage />}/>

@@ -70,9 +70,12 @@ const CartPage = () => {
         const data = await response.json();
 
         const updatedItems = cartItems.map(item => {
-            if (item.id === id) {
+            if (item.id === id && item.quantity > 50) {
+                return { ...item, quantity: item.quantity - 10 };
+            } if (item.id === id && item.quantity < 50) {
                 return { ...item, quantity: item.quantity - 1 };
-            } else {
+            }
+            else {
                 return item;
             }
         }).filter(item => item.quantity > 0);

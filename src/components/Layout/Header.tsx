@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
-const pages = ['Categories', 'Cart'];
+const pages = ['Categories', 'Cart' ,'ProductAdd'];
 const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
