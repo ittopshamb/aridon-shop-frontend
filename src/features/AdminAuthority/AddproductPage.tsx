@@ -5,15 +5,11 @@ import {
     InputLabel,
     ListItem,
     MenuItem,
-    Select,
+    Select, 
     TextField,
     Typography,
 } from "@mui/material";
 import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
 
 type Product = {
     name: string;
@@ -28,7 +24,9 @@ type Category = {
     categoryName: string,
 }
 
-
+const api = axios.create({
+    baseURL: "http://localhost:7079",
+});
 
 const AddProduct = () => {
     const [isAdmin, setIsAdmin] = useState<boolean>();
@@ -89,9 +87,8 @@ const AddProduct = () => {
 
     const handleSubmit = useCallback(async () => {
         try {
-            await api.post(`/products/add?Name=${product.name}&Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, {
-                headers
-            })
+            await api.post(`/products/add?Name=${product.name}
+            &Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, null,{headers});
         } catch {
             alert("Error while creating product!");
         }
