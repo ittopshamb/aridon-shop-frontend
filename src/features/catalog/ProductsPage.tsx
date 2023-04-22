@@ -34,7 +34,8 @@ const ProductsPage = () => {
         fetchProducts();
     }, [categoryId]);
 
-    const handledRemoveProduct = async (productId: string) => {
+    const handledRemoveProduct = async (productId: string,event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         await fetch(`http://localhost:7079/products/delete_by_id?id=${productId}`, {
             method: "DELETE",
             headers: {
@@ -57,7 +58,7 @@ const ProductsPage = () => {
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`$${product.price}`} />
-                    <RemoveButton onClick={() => handledRemoveProduct(product.productId)}>
+                    <RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
                         Remove
                     </RemoveButton>
                 </ListItem>
