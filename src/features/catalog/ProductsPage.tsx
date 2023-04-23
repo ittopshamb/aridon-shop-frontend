@@ -62,6 +62,9 @@ const ProductsPage = () => {
                     <RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
                         Remove
                     </RemoveButton>
+                    <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
+                        <Button>Edit</Button>
+                    </Link>
                 </ListItem>
             </Link>
         ));
