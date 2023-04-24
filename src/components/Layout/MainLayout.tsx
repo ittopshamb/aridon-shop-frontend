@@ -14,6 +14,9 @@ import ProductsPage from "../../features/catalog/ProductsPage";
 import AccountPage from "../../features/auth/AccountInfoPage";
 import ProductCardPage from "../../features/catalog/ProductCardPage";
 import CartPage from "../../features/ordering/CartPage";
+import AddproductPage from "../../features/AdminAuthority/AddproductPage";
+import UpdateProduct from "../../features/AdminAuthority/UpdateproductPage";
+import MainPage from "../../features/MainPage";
 
 const theme = createTheme();
 
@@ -23,7 +26,7 @@ export default function MainLayout() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Container maxWidth="lg">
-                <Router>
+                <Router basename={import.meta.env.BASE_URL}>
                     <Header />
                     <main>
                         <Grid container spacing={5} sx={{ mt: 3 }}>
@@ -32,10 +35,13 @@ export default function MainLayout() {
                         </Grid>
                     </main>
                     <Routes>
+                        <Route path="/" element={<MainPage/>}/>
                         <Route path="/Categories" element={<CategoriesPage/>}/>
                         <Route path="/Products" element={<ProductsPage/>} />
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
                         <Route path="/Product/:productId" element={<ProductCardPage/>} />
+                        <Route path="/ProductAdd" element={<AddproductPage/>} />
+                        <Route path="/ProductUpdate/:productId" element={<UpdateProduct/>} />
                         <Route path="/Login" element={<LoginPage/>}/>
                         <Route path="/Signup" element={<SignupPage/>}/>
                         <Route path="/Account" element={<AccountPage />}/>

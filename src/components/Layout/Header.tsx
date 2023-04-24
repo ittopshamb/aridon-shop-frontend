@@ -12,12 +12,15 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 const pages = ['Categories', 'Cart'];
 const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<undefined | null | HTMLElement>(null);
+    const navigate = useNavigate();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -34,28 +37,30 @@ function ResponsiveAppBar() {
         setAnchorElUser(null);
     };
 
+    const handleLogout = async () => {
+        try {
+            localStorage.removeItem("token");
+            navigate("/login");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                    <Link className={"link"} to="/" style={{
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                    }}
                     >
-                        LOGO
-                    </Typography>
+                        ARIDON
+                    </Link>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -115,7 +120,7 @@ function ResponsiveAppBar() {
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
                             <Link className={"link"} key={page} to={`/${page}`}
-                                  // sx={{ my: 2, color: 'white', display: 'block' }}
+                                // sx={{ my: 2, color: 'white', display: 'block' }}
                             >
                                 {page}
                             </Link>
@@ -144,11 +149,8 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    {/*<Typography textAlign="center">{setting}</Typography>*/}
-                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}
-                                        // sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
+                                <MenuItem key={setting} onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
+                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}>
                                         {setting}
                                     </Link>
                                 </MenuItem>
