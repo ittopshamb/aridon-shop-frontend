@@ -1,13 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Avatar,
     Box,
     Button,
-    Checkbox,
     Container,
-    FormControlLabel,
     Grid,
     Link,
     TextField,
@@ -26,7 +24,7 @@ interface LoginForm {
 }
 
 export default function LoginPage() {
-    const { register, handleSubmit } = useForm<LoginForm>();
+    const {register, handleSubmit} = useForm<LoginForm>();
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -48,13 +46,13 @@ export default function LoginPage() {
 
     return (
         <Container component="main" maxWidth="xs">
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
+            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
+                <LockOutlinedIcon/>
             </Avatar>
             <Typography component="h1" variant="h5">
                 Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
                 <TextField
                     margin="normal"
                     required
@@ -75,16 +73,10 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     {...register("password")}
                 />
-                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
                     Sign In
                 </Button>
                 <Grid container>
-                    <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
-                        </Link>
-                    </Grid>
                     <Grid item>
                         <Link href="/signup" variant="body2">
                             {"Don't have an account? Sign Up"}
