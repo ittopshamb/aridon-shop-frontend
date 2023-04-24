@@ -15,6 +15,7 @@ import AccountPage from "../../features/auth/AccountInfoPage";
 import ProductCardPage from "../../features/catalog/ProductCardPage";
 import CartPage from "../../features/ordering/CartPage";
 import AddproductPage from "../../features/AdminAuthority/AddproductPage";
+import MainPage from "../../features/MainPage";
 
 const theme = createTheme();
 
@@ -33,6 +34,7 @@ export default function MainLayout() {
                         </Grid>
                     </main>
                     <Routes>
+                        <Route path="/" element={<MainPage/>}/>
                         <Route path="/Categories" element={<CategoriesPage/>}/>
                         <Route path="/Products" element={<ProductsPage/>} />
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
