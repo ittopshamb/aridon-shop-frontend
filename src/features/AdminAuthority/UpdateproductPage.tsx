@@ -5,11 +5,14 @@ import {
     InputLabel,
     ListItem,
     MenuItem,
-    Select, 
+    Select,
     TextField,
     Typography,
 } from "@mui/material";
 import axios from "axios";
+import {useParams} from "react-router-dom";
+
+
 
 type Product = {
     name: string;
@@ -28,7 +31,8 @@ const api = axios.create({
     baseURL: "http://localhost:7079",
 });
 
-const AddProduct = () => {
+export default function UpdateProduct():JSX.Element {
+    const {productId} = useParams<{ productId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [categories, setCategories] = useState<Category[]>()
@@ -47,7 +51,7 @@ const AddProduct = () => {
             return;
         }
         setHeaders({ Authorization: `Bearer ${token}` });
-    }, [])
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -71,8 +75,27 @@ const AddProduct = () => {
         }
 
         fetchData();
-    }, [headers])
-
+    }, [headers]);
+    
+    
+    useEffect(() => {
+        async function fetchData() {
+            try{
+                const productResponse = await api.get(`/products/get_by_id?id=${productId}`);
+                setProduct({
+                    name: productResponse.data.name,
+                    price: productResponse.data.price,
+                    image: productResponse.data.image,
+                    description: productResponse.data.description,
+                    categoryId: productResponse.data.categoryId
+                });
+            } catch{
+                alert("Cannot get product, please refresh page!");
+            }
+        }
+        fetchData();
+    },[productId,headers]);
+    
     const createValueChangeHandler = useCallback((key: keyof Product, shouldParseFloat = false) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {
             let value: string | number = event.target.value;
@@ -80,27 +103,53 @@ const AddProduct = () => {
                 value = parseFloat(value);
                 if(isNaN(value)) return;
             }
-
             setProduct(product => ({...product, [key]: value}));
         }
-    }, []);
+    }, [productId]);
+
 
     const handleSubmit = useCallback(async () => {
         try {
-            await api.post(`/products/add?Name=${product.name}
-            &Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, null,{headers});
-            alert("Added");
+            await api.put(`/products/update/${productId}`, {
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                description: product.description,
+                categoryId: product.categoryId 
+               // product
+            },{
+                headers
+            });
         } catch {
             alert("Error while creating product!");
         }
-    }, [product, headers])
+    }, [product, productId, headers]);
 
+    // const handleSubmit = useCallback(async () => {
+    //     try {
+    //         await fetch(`http://localhost:7079/products/update?id=${productId}`, {
+    //             method: "PUT",
+    //             headers,
+    //             body: JSON.stringify({name: product.name,
+    //                     price: product.price,
+    //                     image: product.image,
+    //                     description: product.description,
+    //                     categoryId: product.categoryId} )
+    //         });
+    //        
+    //     } catch (error) {
+    //         alert("ERROR")
+    //     }
+    // }, [product, productId, headers]);
+    
+    
+    
     if(isAdmin === undefined || categories === undefined) return <div>Loading...</div>;
     if(!isAdmin) return <div>Only admin is allowed to add products!</div>;
     return (
         <form>
             <Typography variant="h4" gutterBottom>
-                Add Product
+                Edit Product
             </Typography>
             <ListItem>
                 <TextField required id="outlined-basic" label="Name" variant="outlined" value={product.name} onChange={createValueChangeHandler('name')}/>
@@ -130,7 +179,7 @@ const AddProduct = () => {
             </ListItem>
             <ListItem>
                 <Button onClick={handleSubmit} variant="contained" size="large" sx={{ mt: 3 }}>
-                    Add Product
+                    Change Product
                 </Button>
             </ListItem>
 
@@ -138,4 +187,3 @@ const AddProduct = () => {
     );
 }
 
-export default AddProduct;

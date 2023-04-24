@@ -45,7 +45,8 @@ const ProductsPage = () => {
         });
         setProducts(prevProducts => prevProducts.filter(product => product.productId !== productId));
     };
-
+        
+    
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value - 1);
     };
@@ -62,6 +63,9 @@ const ProductsPage = () => {
                     <RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
                         Remove
                     </RemoveButton>
+                    <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
+                        <Button>Edit</Button>
+                    </Link>
                 </ListItem>
             </Link>
         ));
