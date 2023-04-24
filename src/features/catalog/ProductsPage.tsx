@@ -45,7 +45,8 @@ const ProductsPage = () => {
         });
         setProducts(prevProducts => prevProducts.filter(product => product.productId !== productId));
     };
-
+        
+    
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value - 1);
     };

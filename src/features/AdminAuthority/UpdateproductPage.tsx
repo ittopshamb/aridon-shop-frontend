@@ -111,20 +111,39 @@ export default function UpdateProduct():JSX.Element {
     const handleSubmit = useCallback(async () => {
         try {
             await api.put(`/products/update/${productId}`, {
-                // name: product.name,
-                // price: product.price,
-                // image: product.image,
-                // description: product.description,
-                // categoryId: product.categoryId 
-                product
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                description: product.description,
+                categoryId: product.categoryId 
+               // product
             },{
                 headers
             });
         } catch {
             alert("Error while creating product!");
         }
-    }, [product, productId, headers])
+    }, [product, productId, headers]);
 
+    // const handleSubmit = useCallback(async () => {
+    //     try {
+    //         await fetch(`http://localhost:7079/products/update?id=${productId}`, {
+    //             method: "PUT",
+    //             headers,
+    //             body: JSON.stringify({name: product.name,
+    //                     price: product.price,
+    //                     image: product.image,
+    //                     description: product.description,
+    //                     categoryId: product.categoryId} )
+    //         });
+    //        
+    //     } catch (error) {
+    //         alert("ERROR")
+    //     }
+    // }, [product, productId, headers]);
+    
+    
+    
     if(isAdmin === undefined || categories === undefined) return <div>Loading...</div>;
     if(!isAdmin) return <div>Only admin is allowed to add products!</div>;
     return (
