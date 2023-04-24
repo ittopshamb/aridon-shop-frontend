@@ -13,15 +13,38 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-
+import {useEffect, useState} from "react";
+import {Account} from "../../models";
+import axios from "axios";
 const pages = ['Categories', 'Cart'];
 const settings = ['Account', 'Logout'];
+
+
+const api = axios.create({
+    baseURL: "http://localhost:7079",
+})
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<undefined | null | HTMLElement>(null);
+    const [account, setAccount] = useState<Account | null>(null);
     const navigate = useNavigate();
-
+    
+    
+    useEffect(() => {
+        const fetchAccount = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                const headers = { Authorization: `Bearer ${token}` };
+                const response = await api.get("/account/get_current", {
+                    headers,
+                });
+                setAccount(response.data);
+            }
+        };
+        fetchAccount();
+    }, []);
+    
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -45,7 +68,7 @@ function ResponsiveAppBar() {
             console.error(error);
         }
     };
-
+    const linkStyles = { color: 'white', margin: '10px', marginRight: '30px'};
     return (
         <AppBar position="fixed">
             <Container maxWidth="xl">
@@ -126,6 +149,18 @@ function ResponsiveAppBar() {
                             </Link>
                         ))}
                     </Box>
+                    <Typography>
+                        {account ? (
+                            <Link
+                                style={linkStyles} to={`/Account`}>
+                                {account.email}
+                            </Link>
+                        ) : (
+                            <Link style={linkStyles} to={`/Login`}>
+                                Login
+                            </Link>
+                        )}
+                    </Typography>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
