@@ -13,7 +13,6 @@ import axios from "axios";
 import {useParams} from "react-router-dom";
 
 
-
 type Product = {
     name: string;
     price: number;
@@ -31,7 +30,7 @@ const api = axios.create({
     baseURL: "http://localhost:7079",
 });
 
-export default function UpdateProduct():JSX.Element {
+export default function UpdateProduct(): JSX.Element {
     const {productId} = useParams<{ productId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
@@ -46,16 +45,16 @@ export default function UpdateProduct():JSX.Element {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if(!token) {
+        if (!token) {
             alert("Cannot get user authorization token!");
             return;
         }
-        setHeaders({ Authorization: `Bearer ${token}` });
+        setHeaders({Authorization: `Bearer ${token}`});
     }, []);
 
     useEffect(() => {
         async function fetchData() {
-            if(!headers) return;
+            if (!headers) return;
 
             const userResponse = await api.get("/account/get_current", {
                 headers,
@@ -63,10 +62,10 @@ export default function UpdateProduct():JSX.Element {
 
             const isAdmin = !!userResponse.data?.roles?.includes('Admin')
             setIsAdmin(isAdmin);
-            if(!isAdmin) return;
+            if (!isAdmin) return;
 
             try {
-                const categoriesResponse = await api.get("/categories/get_all", { headers });
+                const categoriesResponse = await api.get("/categories/get_all", {headers});
                 const categories = categoriesResponse.data.categories;
                 setCategories(categories);
             } catch {
@@ -76,11 +75,11 @@ export default function UpdateProduct():JSX.Element {
 
         fetchData();
     }, [headers]);
-    
-    
+
+
     useEffect(() => {
         async function fetchData() {
-            try{
+            try {
                 const productResponse = await api.get(`/products/get_by_id?id=${productId}`);
                 setProduct({
                     name: productResponse.data.name,
@@ -89,79 +88,59 @@ export default function UpdateProduct():JSX.Element {
                     description: productResponse.data.description,
                     categoryId: productResponse.data.categoryId
                 });
-            } catch{
+            } catch {
                 alert("Cannot get product, please refresh page!");
             }
         }
+
         fetchData();
-    },[productId,headers]);
-    
+    }, [productId, headers]);
+
     const createValueChangeHandler = useCallback((key: keyof Product, shouldParseFloat = false) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {
             let value: string | number = event.target.value;
-            if(shouldParseFloat) {
+            if (shouldParseFloat) {
                 value = parseFloat(value);
-                if(isNaN(value)) return;
+                if (isNaN(value)) return;
             }
             setProduct(product => ({...product, [key]: value}));
         }
     }, [productId]);
-
-
+    
     const handleSubmit = useCallback(async () => {
         try {
-            await api.put(`/products/update/${productId}`, {
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                description: product.description,
-                categoryId: product.categoryId 
-               // product
-            },{
-                headers
-            });
+            await api.put(`/products/update?id=${productId}&Name=${product.name}&Price=${product.price}
+                &Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`,{},
+                {
+                    headers
+                });
         } catch {
             alert("Error while creating product!");
         }
     }, [product, productId, headers]);
-
-    // const handleSubmit = useCallback(async () => {
-    //     try {
-    //         await fetch(`http://localhost:7079/products/update?id=${productId}`, {
-    //             method: "PUT",
-    //             headers,
-    //             body: JSON.stringify({name: product.name,
-    //                     price: product.price,
-    //                     image: product.image,
-    //                     description: product.description,
-    //                     categoryId: product.categoryId} )
-    //         });
-    //        
-    //     } catch (error) {
-    //         alert("ERROR")
-    //     }
-    // }, [product, productId, headers]);
     
-    
-    
-    if(isAdmin === undefined || categories === undefined) return <div>Loading...</div>;
-    if(!isAdmin) return <div>Only admin is allowed to add products!</div>;
+    if (isAdmin === undefined || categories === undefined) return <div>Loading...</div>;
+    if (!isAdmin) return <div>Only admin is allowed to add products!</div>;
     return (
         <form>
             <Typography variant="h4" gutterBottom>
                 Edit Product
             </Typography>
             <ListItem>
-                <TextField required id="outlined-basic" label="Name" variant="outlined" value={product.name} onChange={createValueChangeHandler('name')}/>
+                <TextField required id="outlined-basic" label="Price" variant="outlined" value={product.name}
+                           onChange={createValueChangeHandler('name')}/>
             </ListItem>
             <ListItem>
-                <TextField required id="outlined-basic" label="Price" variant="outlined" type="number" value={product.price} onChange={createValueChangeHandler('price')}/>
+                <TextField required id="outlined-basic" label="Price" variant="outlined" type="number"
+                           value={product.price} onChange={createValueChangeHandler('price')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Image_Url" variant="outlined" value={product.image} onChange={createValueChangeHandler('image')}/>
+                <TextField id="outlined-basic" label="Image_Url" variant="outlined" value={product.image}
+                           onChange={createValueChangeHandler('image')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Description" variant="outlined" value={product.description} onChange={createValueChangeHandler('description')}/>
+                <TextField id="outlined-basic" label="Description" variant="outlined" value={product.description}
+                           onChange={createValueChangeHandler('description')}/>
             </ListItem>
             <ListItem>
                 <FormControl fullWidth>
@@ -173,12 +152,13 @@ export default function UpdateProduct():JSX.Element {
                         label="Select Category"
                         onChange={event => setProduct(product => ({...product, categoryId: event.target.value}))}
                     >
-                        {categories.map(category => <MenuItem key={category.categoryId} value={category.categoryId}>{category.categoryName}</MenuItem>)}
+                        {categories.map(category => <MenuItem key={category.categoryId}
+                                                              value={category.categoryId}>{category.categoryName}</MenuItem>)}
                     </Select>
                 </FormControl>
             </ListItem>
             <ListItem>
-                <Button onClick={handleSubmit} variant="contained" size="large" sx={{ mt: 3 }}>
+                <Button onClick={handleSubmit} variant="contained" size="large" sx={{mt: 3}}>
                     Change Product
                 </Button>
             </ListItem>
