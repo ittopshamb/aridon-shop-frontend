@@ -127,7 +127,7 @@ export default function UpdateProduct(): JSX.Element {
                 Edit Product
             </Typography>
             <ListItem>
-                <TextField required id="outlined-basic" label="Price" variant="outlined" value={product.name}
+                <TextField required id="outlined-basic" label="Name" variant="outlined" value={product.name}
                            onChange={createValueChangeHandler('name')}/>
             </ListItem>
             <ListItem>
