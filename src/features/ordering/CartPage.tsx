@@ -30,10 +30,10 @@ const CartPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [headers, setHeaders] = useState<{ Authorization: string }>();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const perPage = 10;
+
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -41,14 +41,15 @@ const CartPage = () => {
             alert("You do not have a shopping cart, log in.");
             return  navigate("/login");
         }
-        setHeaders({ Authorization: `Bearer ${token}` });
+
     }, []);
 
     useEffect(() => {
         const fetchCart = async () => {
-            const response = await api.get('/cart/get', {
-                headers
-            });
+            const response = await api.get('/cart/get',{ headers:
+                    { Authorization: `Bearer ${token}` }
+                    }
+               );
             const data = await response.data;
             setCartItems(data.items);
         };
@@ -76,7 +77,7 @@ const CartPage = () => {
                 Authorization: `Bearer ${token}`,
             }
         });
-        await response.data;
+         await response.data;
         const updatedItems = cartItems.map(item => {
             if (item.id === id && item.quantity > 50) {
                 return { ...item, quantity: item.quantity - 10 };
