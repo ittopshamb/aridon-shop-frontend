@@ -17,6 +17,8 @@ const ProductsPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const [isAdmin,setIsAdmin] = useState(false);
     const token = localStorage.getItem("token");
 
     const perPage = 10;
@@ -35,6 +37,31 @@ const ProductsPage = () => {
         fetchProducts();
     }, [categoryId]);
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(!token) {
+            alert("Cannot get user authorization token!");
+            return;
+        }
+        setHeaders({ Authorization: `Bearer ${token}` });
+    }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            if(!headers) return;
+
+            const userResponse = await api.get("/account/get_current", {
+                headers,
+            });
+
+            const isAdmin = !!userResponse.data?.roles?.includes('Admin')
+            setIsAdmin(isAdmin);
+            if(!isAdmin) return null;
+        }
+        fetchData();
+    }, [headers]);
+
+    
     const handledRemoveProduct = async (productId: string,event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         await api.delete(`/products/delete_by_id?id=${productId}`, {
@@ -59,12 +86,14 @@ const ProductsPage = () => {
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`$${product.price}`} />
-                    <RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
+                    {isAdmin &&(<RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
                         Remove
-                    </RemoveButton>
-                    <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
-                        <Button>Edit</Button>
-                    </Link>
+                    </RemoveButton>)}
+                    {isAdmin && (
+                        <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
+                            <Button>Edit</Button>
+                        </Link>)}
+                    
                 </ListItem>
             </Link>
         ));

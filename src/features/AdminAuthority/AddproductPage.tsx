@@ -43,7 +43,7 @@ const AddProduct = () => {
             return;
         }
         setHeaders({ Authorization: `Bearer ${token}` });
-    }, [])
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -67,7 +67,7 @@ const AddProduct = () => {
         }
 
         fetchData();
-    }, [headers])
+    }, [headers]);
 
     const createValueChangeHandler = useCallback((key: keyof Product, shouldParseFloat = false) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {
