@@ -53,7 +53,7 @@ const ProductsPage = () => {
     };
 
     return (
-        <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center'}} maxWidth="800px">
+        <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',maxWidth: '800px'}}>
             {getPaginatedItems().map(product => {
                 if (product) {
                     return (
