@@ -35,14 +35,11 @@ const CartPage = () => {
     const perPage = 10;
 
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
+
         if(!token) {
             alert("You do not have a shopping cart, log in.");
-            return  navigate("/login");
+            navigate("/login");
         }
-
-    }, []);
 
     useEffect(() => {
         const fetchCart = async () => {
