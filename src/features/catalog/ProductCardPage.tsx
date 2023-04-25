@@ -1,7 +1,12 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Container, Card, CardContent, CardMedia, Typography, Button, TextField} from '@mui/material';
-import api from "../Api";
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: "http://localhost:7079",
+});
 
 type Product = {
     productId: string;
@@ -13,50 +18,47 @@ type Product = {
 };
 
 export default function ProductCardPage(): JSX.Element {
-    const { productId } = useParams<{ productId: string }>();
+    const {productId} = useParams<{ productId: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    
-    if (!token) {
-        navigate("/login");
-    }
 
-    const headers = {
-        Authorization: `Bearer ${token}`,
-    };
+
+
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        async function fetchProduct() {
             const response = await api.get(`/products/get_by_id?id=${productId}`);
             const data = await response.data;
             setProduct(data);
-        };
+        }
         fetchProduct();
     }, [productId]);
 
-    const handleAddToCart = async () => {
-        try {
-            const response = await api.post(`/cart/add_item?productId=${productId}&quantity=${quantity}`, {
-                productId,
-                quantity,
-            }, {
-                headers,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
+    const handleAddToCart = async () => {
+
+        if (!token) {
+            alert("Go authoriz!");
+            return navigate("/login");
+        }
+        const headers = {Authorization: `Bearer ${token}`}
+      await api.post(`/cart/add_item?productId=${productId}&quantity=${quantity}`, {
+            productId,
+            quantity,
+        }, {
+            headers,
+        });
+    }
     if (!product) {
         return <div>Loading product...</div>;
     }
 
     return (
         <Container maxWidth="sm">
-            <Card sx={{ maxWidth: 500,margin: "5px" }}>
-                <CardMedia component="img" height="500" image={product.image} alt={product.productName} />
+            <Card sx={{maxWidth: 500, margin: "5px"}}>
+                <CardMedia component="img" height="500" image={product.image} alt={product.productName}/>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {product.productName}
@@ -72,10 +74,11 @@ export default function ProductCardPage(): JSX.Element {
                         type="number"
                         value={quantity}
                         onChange={(e) => setQuantity(parseInt(e.target.value))}
-                        inputProps={{ min: 1 }}
-                        sx={{ marginTop: '10px', width: '100px'}}
+                        inputProps={{min: 1}}
+                        sx={{marginTop: '10px', width: '100px'}}
                     />
-                    <Button variant="contained" sx={{ marginTop: '20px', marginLeft: '10px', height: '30px' }} onClick={handleAddToCart}>
+                    <Button variant="contained" sx={{marginTop: '20px', marginLeft: '10px', height: '30px'}}
+                            onClick={handleAddToCart}>
                         Add to Cart
                     </Button>
                 </CardContent>

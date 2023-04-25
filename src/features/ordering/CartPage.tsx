@@ -9,7 +9,7 @@ import {
     Button, styled, Stack, Pagination, List, ListItem
 } from '@mui/material';
 import api from "../Api";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 type CartItem = {
     id: string;
@@ -30,15 +30,24 @@ const CartPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const perPage = 10;
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(!token) {
+            alert("You do not have a shopping cart, log in.");
+            return  navigate("/login");
+        }
+        setHeaders({ Authorization: `Bearer ${token}` });
+    }, []);
+
+    useEffect(() => {
         const fetchCart = async () => {
             const response = await api.get('/cart/get', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers
             });
             const data = await response.data;
             setCartItems(data.items);
