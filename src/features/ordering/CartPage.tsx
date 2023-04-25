@@ -8,6 +8,8 @@ import {
     Typography,
     Button, styled, Stack, Pagination, List, ListItem
 } from '@mui/material';
+import api from "../Api";
+import {Link} from "react-router-dom";
 
 type CartItem = {
     id: string;
@@ -33,14 +35,13 @@ const CartPage = () => {
 
     useEffect(() => {
         const fetchCart = async () => {
-            const response = await fetch('http://localhost:7079/cart/get', {
+            const response = await api.get('/cart/get', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            const data = await response.json();
+            const data = await response.data;
             setCartItems(data.items);
-            console.log(data.items);
         };
         fetchCart();
     }, [token]);
@@ -49,9 +50,9 @@ const CartPage = () => {
         const fetchProducts = async () => {
             const ids = cartItems.map(item => item.productId);
             const response = await Promise.all(
-                ids.map(id => fetch(`http://localhost:7079/products/get_by_id?id=${id}`))
+                ids.map(id => api.get(`/products/get_by_id?id=${id}`))
             );
-            const data = await Promise.all(response.map(res => res.json()));
+            const data = await Promise.all(response.map(res => res.data));
             setProducts(data);
             setPageCount(Math.ceil(data.length / perPage));
         };
@@ -61,14 +62,12 @@ const CartPage = () => {
     }, [cartItems]);
 
     const handleRemoveFromCart = async (id: string) => {
-        const response = await fetch(`http://localhost:7079/cart/delete_item?id=${id}&quantity=1`, {
-            method: 'DELETE',
+        const response = await api.delete(`/cart/delete_item?id=${id}&quantity=1`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         });
-        const data = await response.json();
-
+        await response.data;
         const updatedItems = cartItems.map(item => {
             if (item.id === id && item.quantity > 50) {
                 return { ...item, quantity: item.quantity - 10 };
@@ -110,27 +109,29 @@ const CartPage = () => {
                 const item = cartItems.find(item => item.productId === product.productId);
                 if (item) {
                     return (
-                        <Card key={product.productId} sx={{ maxWidth: 500, margin: '5px' }}>
-                            <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
-                            <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    {product.productName}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    Quantity: {item.quantity}
-                                </Typography>
-                                <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
-                                    Price: ${product.price * item.quantity}
-                                </Typography>
-                                <Button
-                                    variant="contained"
-                                    sx={{ marginTop: '1rem' }}
-                                    onClick={() => handleRemoveFromCart(item.id)}
-                                >
-                                    Remove
-                                </Button>
-                            </CardContent>
-                        </Card>
+                        <Link key={product.productId} to={`/product/${product.productId}`}>
+                            <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px' }}>
+                                <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
+                                <CardContent sx={{width:'200px',height:'400px'}}>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        {product.productName}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Quantity: {item.quantity}
+                                    </Typography>
+                                    <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
+                                        Price: ${product.price * item.quantity}
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        sx={{ marginTop: '1rem' }}
+                                        onClick={() => handleRemoveFromCart(item.id)}
+                                    >
+                                        Remove
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     );
                 } else {
                     return null;
@@ -151,7 +152,7 @@ const CartPage = () => {
                     </Button>
                 </ListItem>
                 <ListItem>
-                    <StyledStack sx={{ marginLeft: '30px'}} spacing={2}>
+                    <StyledStack sx={{ marginLeft: '-15px'}} spacing={2}>
                         <Pagination
                             count={pageCount}
                             variant="outlined"

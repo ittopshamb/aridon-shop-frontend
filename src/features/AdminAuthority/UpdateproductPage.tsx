@@ -9,8 +9,8 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import axios from "axios";
 import {useParams} from "react-router-dom";
+import api from "../Api";
 
 
 type Product = {
@@ -25,10 +25,6 @@ type Category = {
     categoryId: string,
     categoryName: string,
 }
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
 
 export default function UpdateProduct(): JSX.Element {
     const {productId} = useParams<{ productId: string }>();

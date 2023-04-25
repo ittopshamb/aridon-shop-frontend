@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
 import {Button, List, ListItem, ListItemText, Pagination, Stack, styled} from "@mui/material";
 import {Link, useParams} from 'react-router-dom';
+import api from "../Api";
 
 type Product = {
     productId: string;
@@ -22,13 +23,12 @@ const ProductsPage = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch(
-                `http://localhost:7079/products/get_by_category?categoryId=${categoryId}`,{
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                });
-            const data = await response.json();
+            const response = await api.get(`/products/get_by_category?categoryId=${categoryId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await response.data;
             setProducts(data.products);
             setPageCount(Math.ceil(data.products.length / perPage));
         };
@@ -37,8 +37,7 @@ const ProductsPage = () => {
 
     const handledRemoveProduct = async (productId: string,event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        await fetch(`http://localhost:7079/products/delete_by_id?id=${productId}`, {
-            method: "DELETE",
+        await api.delete(`/products/delete_by_id?id=${productId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },

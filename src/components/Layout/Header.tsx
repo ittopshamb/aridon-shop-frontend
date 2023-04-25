@@ -15,14 +15,13 @@ import { Link }from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Account} from "../../models";
-import axios from "axios";
+import api from "../../features/Api";
+
+
+
 const pages = ['Categories', 'Cart'];
 const settings = ['Account', 'Logout'];
 
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-})
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
@@ -44,7 +43,7 @@ function ResponsiveAppBar() {
         };
         fetchAccount();
     }, []);
-    
+
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
@@ -63,6 +62,7 @@ function ResponsiveAppBar() {
     const handleLogout = async () => {
         try {
             localStorage.removeItem("token");
+            setAccount(null);
             navigate("/login");
         } catch (error) {
             console.error(error);
@@ -153,7 +153,7 @@ function ResponsiveAppBar() {
                         {account ? (
                             <Link
                                 style={linkStyles} to={`/Account`}>
-                                {account.email}
+                                {account.email} 
                             </Link>
                         ) : (
                             <Link style={linkStyles} to={`/Login`}>

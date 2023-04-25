@@ -1,11 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Container, Card, CardContent, CardMedia, Typography, Button, TextField} from '@mui/material';
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
+import api from "../Api";
 
 type Product = {
     productId: string;
@@ -33,8 +29,8 @@ export default function ProductCardPage(): JSX.Element {
 
     useEffect(() => {
         const fetchProduct = async () => {
-            const response = await fetch(`http://localhost:7079/products/get_by_id?id=${productId}`);
-            const data = await response.json();
+            const response = await api.get(`/products/get_by_id?id=${productId}`);
+            const data = await response.data;
             setProduct(data);
         };
         fetchProduct();

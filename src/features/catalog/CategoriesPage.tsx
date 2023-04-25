@@ -2,6 +2,7 @@
 import { List, ListItem, ListItemText, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import api from "../Api";
 
 type Category = {
     categoryId: string;
@@ -22,16 +23,16 @@ const CategoriesPage = () => {
     
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch("http://localhost:7079/parentCategories/get_all");
-            const data = await response.json();
+            const response = await api.get("/parentCategories/get_all");
+            const data = await response.data;
             setCategories(data.parentCategories);
         };
         fetchCategories();
     }, []);
 
     const handleClick = async (categoryId: string) => {
-        const response = await fetch(`http://localhost:7079/categories/get_by_parent_id?parentId=${categoryId}`);
-        const data = await response.json();
+        const response = await api.get(`/categories/get_by_parent_id?parentId=${categoryId}`);
+        const data = await response.data;
         setSubcategories(data.categories);
         setSelectedCategory(categoryId);
 

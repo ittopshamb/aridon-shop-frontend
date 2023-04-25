@@ -1,10 +1,6 @@
 ﻿import { useEffect, useState } from "react";
-import axios from "axios";
-import { Box, Typography } from "@mui/material";
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
+import {Box, Typography} from "@mui/material";
+import api from "../Api"
 
 type Account = {
     name: string;

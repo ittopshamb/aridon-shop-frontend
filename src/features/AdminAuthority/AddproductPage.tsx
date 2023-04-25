@@ -9,7 +9,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import axios from "axios";
+import api from "../Api";
 
 type Product = {
     name: string;
@@ -23,10 +23,6 @@ type Category = {
     categoryId: string,
     categoryName: string,
 }
-
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
 
 const AddProduct = () => {
     const [isAdmin, setIsAdmin] = useState<boolean>();

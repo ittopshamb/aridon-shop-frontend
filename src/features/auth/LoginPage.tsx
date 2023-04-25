@@ -12,11 +12,8 @@ import {
     Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import axios from "axios";
+import api from "../Api";
 
-const api = axios.create({
-    baseURL: "http://localhost:7079",
-});
 
 interface LoginForm {
     email: string;
@@ -78,7 +75,7 @@ export default function LoginPage() {
                 </Button>
                 <Grid container>
                     <Grid item>
-                        <Link href="/signup" variant="body2">
+                        <Link href="/signup" variant="body2" sx={{ml:12,mr:12}}>
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
