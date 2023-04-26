@@ -40,7 +40,7 @@ export default function ProductCardPage(): JSX.Element {
     const handleAddToCart = async () => {
 
         if (!token) {
-            alert("Go authoriz!");
+            alert("Пожалуйста авторизуйтесь перед тем, как сделать покупку!");
             return navigate("/login");
         }
         const headers = {Authorization: `Bearer ${token}`}
@@ -67,7 +67,7 @@ export default function ProductCardPage(): JSX.Element {
                         {product.description}
                     </Typography>
                     <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
-                        Price: ${product.price}
+                        Цена: ₽{product.price}
                     </Typography>
                     <TextField
                         label="Quantity"
@@ -79,12 +79,10 @@ export default function ProductCardPage(): JSX.Element {
                     />
                     <Button variant="contained" sx={{marginTop: '20px', marginLeft: '10px', height: '30px'}}
                             onClick={handleAddToCart}>
-                        Add to Cart
+                        Добавить в корзину
                     </Button>
                 </CardContent>
             </Card>
         </Container>
     );
 };
-
-// export default ProductCardPage;

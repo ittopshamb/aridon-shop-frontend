@@ -36,16 +36,7 @@ const ProductsPage = () => {
         };
         fetchProducts();
     }, [categoryId]);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if(!token) {
-            alert("Cannot get user authorization token!");
-            return;
-        }
-        setHeaders({ Authorization: `Bearer ${token}` });
-    }, []);
-
+    
     useEffect(() => {
         async function fetchData() {
             if(!headers) return;
@@ -85,7 +76,7 @@ const ProductsPage = () => {
             <Link key={product.productId} to={`/product/${product.productId}`}>
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
-                    <ListItemText primary={product.productName} secondary={`$${product.price}`} />
+                    <ListItemText primary={product.productName} secondary={`₽${product.price}`} />
                     {isAdmin &&(<RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
                         Remove
                     </RemoveButton>)}
@@ -93,7 +84,6 @@ const ProductsPage = () => {
                         <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
                             <Button>Edit</Button>
                         </Link>)}
-                    
                 </ListItem>
             </Link>
         ));
