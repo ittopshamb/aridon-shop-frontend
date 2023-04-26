@@ -1,8 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
-    Avatar,
     Box,
     Button,
     Container,
@@ -11,17 +10,18 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import api from "../Api";
 
 
-interface LoginForm {
+interface SignupForm {
+    name: string;
+    surname: string;
     email: string;
     password: string;
 }
 
-export default function LoginPage() {
-    const {register, handleSubmit} = useForm<LoginForm>();
+export default function SignupPage() {
+    const {register, handleSubmit} = useForm<SignupForm>();
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -31,9 +31,9 @@ export default function LoginPage() {
         }
     }, [navigate]);
 
-    const onSubmit = async (data: LoginForm) => {
+    const onSubmit = async (data: SignupForm) => {
         try {
-            const response = await api.post("/account/authentication", data);
+            const response = await api.post("/account/regustration", data);
             localStorage.setItem("token", response.data.token);
             navigate("/account");
         } catch (error) {
@@ -43,13 +43,30 @@ export default function LoginPage() {
 
     return (
         <Container component="main" maxWidth="xs">
-            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-                <LockOutlinedIcon/>
-            </Avatar>
             <Typography component="h1" variant="h5">
-                Sign in
+                Sign up
             </Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
+            <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="name"
+                    label="User Name"
+                    autoComplete="name"
+                    autoFocus
+                    {...register("name")}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="surname"
+                    label="User Surname"
+                    autoComplete="surname"
+                    autoFocus
+                    {...register("surname")}
+                />
                 <TextField
                     margin="normal"
                     required
@@ -71,12 +88,12 @@ export default function LoginPage() {
                     {...register("password")}
                 />
                 <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
-                    Sign In
+                    Sign up
                 </Button>
                 <Grid container>
                     <Grid item>
-                        <Link href="/signup" variant="body2" sx={{ml:12,mr:12}}>
-                            {"Don't have an account? Sign Up"}
+                        <Link href="/Login" variant="body2" >
+                            {"Already have an account? Sign in"}
                         </Link>
                     </Grid>
                 </Grid>

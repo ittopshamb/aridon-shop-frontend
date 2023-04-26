@@ -5,19 +5,43 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link }from 'react-router-dom';
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Account} from "../../models";
+import api from "../../features/Api";
+
+
+
+const pages = ['Categories', 'Cart'];
+const settings = ['Account', 'Logout'];
+
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<undefined | null | HTMLElement>(null);
+    const [account, setAccount] = useState<Account | null>(null);
+    const navigate = useNavigate();
+    
+    
+    useEffect(() => {
+        const fetchAccount = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                const headers = { Authorization: `Bearer ${token}` };
+                const response = await api.get("/account/get_current", {
+                    headers,
+                });
+                setAccount(response.data);
+            }
+        };
+        fetchAccount();
+    }, []);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -33,29 +57,32 @@ function ResponsiveAppBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-    
+
+    const handleLogout = async () => {
+        try {
+            localStorage.removeItem("token");
+            setAccount(null);
+            navigate("/login");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const linkStyles = { color: 'white', margin: '10px', marginRight: '30px'};
     return (
-        <AppBar position="static">
+        <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                    <Link className={"link"} to="/" style={{
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                    }}
                     >
-                        LOGO
-                    </Typography>
+                        ARIDON
+                    </Link>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -66,7 +93,7 @@ function ResponsiveAppBar() {
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            <MenuIcon />
+                            
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -112,15 +139,27 @@ function ResponsiveAppBar() {
                     >
                         LOGO
                     </Typography>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map((page) => (
-                                <Link style={{color: "white", margin:"10px"}} key={page} to={`/${page}`} 
-                                      // sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    {page}
-                                </Link>
-                            ))}
-                        </Box>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page) => (
+                            <Link className={"link"} key={page} to={`/${page}`}
+                                // sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                {page}
+                            </Link>
+                        ))}
+                    </Box>
+                    <Typography>
+                        {account ? (
+                            <Link
+                                style={linkStyles} to={`/Account`}>
+                                {account.email} 
+                            </Link>
+                        ) : (
+                            <Link style={linkStyles} to={`/Login`}>
+                                Login
+                            </Link>
+                        )}
+                    </Typography>
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -144,8 +183,10 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                <MenuItem key={setting} onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
+                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}>
+                                        {setting}
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
