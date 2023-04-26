@@ -6,15 +6,16 @@ import {
     CardContent,
     CardMedia,
     Typography,
-    Button, styled, Stack, Pagination, List, ListItem
+    Button, styled, Stack, Pagination, List, ListItem, Modal, TextField, Alert
 } from '@mui/material';
 import api from "../Api";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type CartItem = {
     id: string;
     productId: string;
     quantity: number;
+    price: number;
 };
 
 type Product = {
@@ -30,29 +31,33 @@ const CartPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [isOrdering, setIsOrdering] = useState<boolean>(false);
+    const [city, setCity] = useState<string>('');
+    const [address, setAddress] = useState<string>('');
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const perPage = 10;
 
-
-
+    useEffect(() => {
         if(!token) {
-            alert("You do not have a shopping cart, log in.");
+            alert("Пожалуйста авторизуйтесь, чтобы увидеть корзину!");
             navigate("/login");
         }
-
-    useEffect(() => {
-        const fetchCart = async () => {
-            const response = await api.get('/cart/get',{ headers:
-                    { Authorization: `Bearer ${token}` }
-                    }
-               );
-            const data = await response.data;
-            setCartItems(data.items);
-        };
-        fetchCart();
+        else {
+            const fetchCart = async () => {
+                const response = await api.get('/cart/get', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await response.data;
+                setCartItems(data.items);
+                setIsOrdering(false);
+            };
+            fetchCart();
+        }
     }, [token]);
-
+    
     useEffect(() => {
         const fetchProducts = async () => {
             const ids = cartItems.map(item => item.productId);
@@ -74,7 +79,7 @@ const CartPage = () => {
                 Authorization: `Bearer ${token}`,
             }
         });
-         await response.data;
+        await response.data;
         const updatedItems = cartItems.map(item => {
             if (item.id === id && item.quantity > 50) {
                 return { ...item, quantity: item.quantity - 10 };
@@ -95,11 +100,43 @@ const CartPage = () => {
                 const product = products.find(p => p.productId === item.productId);
                 if (product) {
                     total += product.price * item.quantity;
+                    item.price = product.price;
                 }
             });
         }
         return total;
     };
+
+    const handlePlaceOrder = async () => {
+        await api.post(`/orders/place_order`, {
+            items: cartItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: item.price,
+            })),
+            city: city,
+            address: address,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        setIsOrdering(false);
+        navigate('/');
+    };
+
+    const handleBuyClick = () => {
+        setIsOrdering(true);
+    };
+
+    const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCity(event.target.value);
+    };
+
+    const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAddress(event.target.value);
+    };
+    
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setCurrentPage(value - 1);
     };
@@ -110,67 +147,100 @@ const CartPage = () => {
         return products.slice(startIndex, endIndex);
     };
 
-    return (
-        <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center'}} maxWidth="sm">
-            {getPaginatedItems().map(product => {
-                const item = cartItems.find(item => item.productId === product.productId);
-                if (item) {
-                    return (
-                        <Link key={product.productId} to={`/product/${product.productId}`}>
-                            <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px' }}>
-                                <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
-                                <CardContent sx={{width:'200px',height:'400px'}}>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        {product.productName}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        Quantity: {item.quantity}
-                                    </Typography>
-                                    <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
-                                        Price: ${product.price * item.quantity}
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ marginTop: '1rem' }}
-                                        onClick={() => handleRemoveFromCart(item.id)}
-                                    >
-                                        Remove
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    );
-                } else {
-                    return null;
-                }
-            })}
-            <List sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',marginLeft: '190px'}}>
-
-                <ListItem>
-                    <Box >
-                        <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
-                            Total Price: ${getTotalPrice()}
-                        </Typography>
-                    </Box>
-                </ListItem>
-                <ListItem>
-                    <Button variant="contained" sx={{ marginTop: '20px', height: '40px' ,marginLeft:'35px'}}>
-                        Buy
-                    </Button>
-                </ListItem>
-                <ListItem>
-                    <StyledStack sx={{ marginLeft: '-15px'}} spacing={2}>
-                        <Pagination
-                            count={pageCount}
-                            variant="outlined"
-                            shape="rounded"
-                            page={currentPage + 1}
-                            onChange={handlePageChange}
-                        />
-                    </StyledStack>
-                </ListItem>
-            </List>
-        </Container>
+    return (<>
+            <Modal style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }} open={isOrdering} onClose={() => setIsOrdering(false)}
+                   aria-labelledby="modal-modal-title"
+                   aria-describedby="modal-modal-description">
+                <Box sx={{
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 2,
+                    width: 400,
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <form>
+                        <ListItem>
+                            <TextField required id="outlined-basic" label="Город" variant="outlined" value={city}
+                                       onChange={handleCityChange}/>
+                        </ListItem>
+                        <ListItem>
+                            <TextField required id="outlined-basic" label="Адрес" variant="outlined"
+                                       value={address} onChange={handleAddressChange}/>
+                        </ListItem>
+                        <Button onClick={handlePlaceOrder} variant="contained" size="large" sx={{mt: 3, ml: 5}}>
+                            Подтвердить
+                        </Button>
+                    </form>
+                </Box>
+            </Modal>
+            <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center'}} maxWidth="sm">
+                {getPaginatedItems().map(product => {
+                    const item = cartItems.find(item => item.productId === product.productId);
+                    if (item) {
+                        return (
+                            <Link key={product.productId} to={`/product/${product.productId}`}>
+                                <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px' }}>
+                                    <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
+                                    <CardContent sx={{width:'200px',height:'400px'}}>
+                                        <Typography gutterBottom variant="h5" component="div">
+                                            {product.productName}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Кол-во: {item.quantity}
+                                        </Typography>
+                                        <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
+                                            Цена: ₽{product.price * item.quantity}
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ marginTop: '1rem' }}
+                                            onClick={() => handleRemoveFromCart(item.id)}
+                                        >
+                                            Удалить
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Link>
+                        );
+                    } else {
+                        return null;
+                    }
+                })}
+                <List sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',marginLeft: '190px'}}>
+                    <ListItem>
+                        <Box >
+                            <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem',marginLeft:'-35px' }}>
+                                Общая стоимость: ₽{getTotalPrice()}
+                            </Typography>
+                        </Box>
+                    </ListItem>
+                    <ListItem>
+                        <Button variant="contained" sx={{ marginTop: '20px', height: '40px' ,marginLeft:'25px'}} onClick={handleBuyClick}>
+                            Купить
+                        </Button>
+                    </ListItem>
+                    <ListItem>
+                        <StyledStack spacing={2}>
+                            <Pagination
+                                count={pageCount}
+                                variant="outlined"
+                                shape="rounded"
+                                page={currentPage + 1}
+                                onChange={handlePageChange}
+                            />
+                        </StyledStack>
+                    </ListItem>
+                </List>
+            </Container>
+        </>
     );
 };
 const StyledStack = styled(Stack)({
