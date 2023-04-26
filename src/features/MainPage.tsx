@@ -25,7 +25,7 @@ type Product = {
     categoryId: string;
 };
 
-const ProductsPage = () => {
+const MainPage = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -53,6 +53,7 @@ const ProductsPage = () => {
     };
 
     return (
+        <>
         <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',maxWidth: '800px'}}>
             {getPaginatedItems().map(product => {
                 if (product) {
@@ -65,7 +66,7 @@ const ProductsPage = () => {
                                         {product.productName}
                                     </Typography>
                                     <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
-                                        Price: ${product.price}
+                                        Цена: ₽{product.price}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -75,20 +76,21 @@ const ProductsPage = () => {
                     return null;
                 }
             })}
-            <List sx={{display:'flex', flexWrap:'wrap', justifyContent:'center',marginLeft: '190px'}}>
-                <ListItem>
-                    <StyledStack sx={{ marginRight: '215px'}} spacing={2}>
-                        <Pagination
-                            count={pageCount}
-                            variant="outlined"
-                            shape="rounded"
-                            page={currentPage + 1}
-                            onChange={handlePageChange}
-                        />
-                    </StyledStack>
-                </ListItem>
-            </List>
         </Container>
+        <List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', bottom: '40px', width: '100%', left: '91%', transform: 'translateX(-50%)'}}>
+            <ListItem>
+                <StyledStack spacing={2}>
+                    <Pagination
+                        count={pageCount}
+                        variant="outlined"
+                        shape="rounded"
+                        page={currentPage + 1}
+                        onChange={handlePageChange}
+                    />
+                </StyledStack>
+            </ListItem>
+        </List>
+    </>
     );
 };
 
@@ -99,4 +101,4 @@ const StyledStack = styled(Stack)({
     marginTop: "16px",
 });
 
-export default ProductsPage;
+export default MainPage;
