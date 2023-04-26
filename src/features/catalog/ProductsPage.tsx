@@ -20,9 +20,21 @@ const ProductsPage = () => {
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [isAdmin,setIsAdmin] = useState(false);
     const token = localStorage.getItem("token");
-
     const perPage = 10;
 
+    useEffect(() => {
+        async function fetchData() {
+            if(!headers) return;
+            const userResponse = await api.get("/account/get_current", {
+                headers
+            });
+            const isAdmin = !!userResponse.data?.roles?.includes('Admin')
+            setIsAdmin(isAdmin);
+            if(!isAdmin) return null;
+        }
+        fetchData();
+    }, [headers]);
+    
     useEffect(() => {
         const fetchProducts = async () => {
             const response = await api.get(`/products/get_by_category?categoryId=${categoryId}`, {
@@ -31,27 +43,12 @@ const ProductsPage = () => {
                 },
             });
             const data = await response.data;
+            setHeaders({ Authorization: `Bearer ${token}` })
             setProducts(data.products);
             setPageCount(Math.ceil(data.products.length / perPage));
         };
         fetchProducts();
     }, [categoryId]);
-    
-    useEffect(() => {
-        async function fetchData() {
-            if(!headers) return;
-
-            const userResponse = await api.get("/account/get_current", {
-                headers,
-            });
-
-            const isAdmin = !!userResponse.data?.roles?.includes('Admin')
-            setIsAdmin(isAdmin);
-            if(!isAdmin) return null;
-        }
-        fetchData();
-    }, [headers]);
-
     
     const handledRemoveProduct = async (productId: string,event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
