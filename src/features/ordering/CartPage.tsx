@@ -91,6 +91,7 @@ const CartPage = () => {
             }
         }).filter(item => item.quantity > 0);
         setCartItems(updatedItems);
+        navigate('/Cart')
     };
 
     const getTotalPrice = (): number => {
