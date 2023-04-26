@@ -10,7 +10,7 @@ type Category = {
     categoryName:string;
 };
 export default function UpdateCategoryPage(): JSX.Element{
-    const {productId} = useParams<{ productId: string }>();
+    const {categoryId} = useParams<{ categoryId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [category,setCategory] = useState<Category>({
@@ -44,7 +44,7 @@ export default function UpdateCategoryPage(): JSX.Element{
     useEffect(()=>{
         async function fetchData(){
             try{
-                const categoryResponse = await api.get(`/categories/get_by_id?id=${productId}`);
+                const categoryResponse = await api.get(`/categories/get_by_id?id=${categoryId}`);
                 console.log(categoryResponse.data);
                 setCategory({
                     categoryId: categoryResponse.data.categoryId,
@@ -56,27 +56,26 @@ export default function UpdateCategoryPage(): JSX.Element{
             }
         }
         fetchData();
-    },[productId]);
+    },[categoryId]);
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/categories/update?id=${productId}$CategoryName=${category.categoryName}&CategoryId=${category.categoryId}$`,{},
+            await api.put(`/categories/update?id=${categoryId}$newName=${category.categoryName}`,{},
                 {
                     headers
                 });
-
             alert("Changed");
         } catch  {
             alert("Error while creating product!");
         }
-    },[productId, headers]);
+    },[headers]);
     
     const createValueChangeHandler = useCallback((key: keyof Category) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {
             let value: string | number = event.target.value;
             setCategory(el => ({...el, [key]: value}));
         }
-    }, [productId]);
+    }, [categoryId]);
 
     if (isAdmin === undefined || category === undefined) return <div>Loading...</div>;
     if (!isAdmin) return <div>Only admin is allowed to add products!</div>;

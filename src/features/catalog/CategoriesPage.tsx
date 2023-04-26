@@ -70,7 +70,7 @@ const CategoriesPage = () => {
             <List>
                 {categories.map((category) => (
                     <React.Fragment key={category.categoryId}>
-                        <ListItem button onClick={() => handleClick(category.categoryId)}>
+                        <ListItem onClick={() => handleClick(category.categoryId)}>
                             <ListItemText primary={category.categoryName} />
                             {isAdmin && (
                                 <Link key={category.categoryId} to={`/ParentCategoryUpdate/${category.categoryId}`}>

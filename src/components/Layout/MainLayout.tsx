@@ -46,8 +46,8 @@ export default function MainLayout() {
                         <Route path="/Product/:productId" element={<ProductCardPage/>} />
                         <Route path="/ProductAdd" element={<AddProductPage/>} />
                         <Route path="/ProductUpdate/:productId" element={<UpdateProductPage/>} />
-                        <Route path="/ParentCategoryUpdate/:productId" element={<UpdateParentCategoryPage/>}/>
-                        <Route path="/CategoryUpdate/:productId" element={<UpdateCategoryPage/>}/>
+                        <Route path="/ParentCategoryUpdate/:parentCategoryId" element={<UpdateParentCategoryPage/>}/>
+                        <Route path="/CategoryUpdate/:categoryId" element={<UpdateCategoryPage/>}/>
                         <Route path="/Login" element={<LoginPage/>}/>
                         <Route path="/Signup" element={<SignupPage/>}/>
                         <Route path="/Account" element={<AccountPage />}/>

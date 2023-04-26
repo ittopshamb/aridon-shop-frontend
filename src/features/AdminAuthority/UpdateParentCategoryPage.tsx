@@ -14,7 +14,7 @@ type ParentCategory = {
 }
 
 export default function UpdateParentCategoryPage(): JSX.Element {
-    const {productId} = useParams<{ productId: string }>();
+    const {parentCategoryId} = useParams<{ parentCategoryId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [parentCategory,setParentCategory] = useState<ParentCategory>({
@@ -48,7 +48,7 @@ export default function UpdateParentCategoryPage(): JSX.Element {
     useEffect(()=>{
         async function fetchData(){
             try{
-                const parentResponse = await api.get(`/parentCategories/get_by_id?id=${productId}`);
+                const parentResponse = await api.get(`/parentCategories/get_by_id?id=${parentCategoryId}`);
                 console.log(parentResponse.data);
                 setParentCategory({
                     categoryName: parentResponse.data.categoryName,
@@ -63,23 +63,22 @@ export default function UpdateParentCategoryPage(): JSX.Element {
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/parentCategories/update?id=${productId}$CategoryName=${parentCategory.categoryName}&CategoryId=${parentCategory.categoryId}`,{},
+            await api.put(`/parentCategories/update?id=${parentCategoryId}$newName=${parentCategory.categoryName}`,{},
                 {
                     headers
                 });
-
             alert("Changed");
         } catch  {
             alert("Error while creating product!");
         }
-    },[productId, headers]);
+    },[parentCategoryId, headers]);
 
     const createValueChangeHandler = useCallback((key: keyof ParentCategory) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {
             let value: string | number = event.target.value;
             setParentCategory(el => ({...el, [key]: value}));
         }
-    }, [productId]);
+    }, [parentCategoryId]);
     
     
     if (isAdmin === undefined || parentCategory === undefined) return <div>Loading...</div>;
