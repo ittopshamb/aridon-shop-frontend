@@ -15,7 +15,7 @@ import AccountPage from "../../features/auth/AccountInfoPage";
 import ProductCardPage from "../../features/catalog/ProductCardPage";
 import CartPage from "../../features/ordering/CartPage";
 import AddProductPage from "../../features/AdminAuthority/AddProductPage";
-import UpdateProductPage from "../../features/AdminAuthority/UpdateproductPage";
+import UpdateProductPage from "../../features/AdminAuthority/UpdateProductPage";
 import MainPage from "../../features/MainPage";
 import UpdateParentCategoryPage from "../../features/AdminAuthority/UpdateParentCategoryPage";
 import UpdateCategoryPage from "../../features/AdminAuthority/UpdateCategoryPage";
