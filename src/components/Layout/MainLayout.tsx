@@ -14,9 +14,13 @@ import ProductsPage from "../../features/catalog/ProductsPage";
 import AccountPage from "../../features/auth/AccountInfoPage";
 import ProductCardPage from "../../features/catalog/ProductCardPage";
 import CartPage from "../../features/ordering/CartPage";
-import AddproductPage from "../../features/AdminAuthority/AddproductPage";
-import UpdateProduct from "../../features/AdminAuthority/UpdateproductPage";
+import AddProductPage from "../../features/AdminAuthority/AddProductPage";
+import UpdateProductPage from "../../features/AdminAuthority/UpdateproductPage";
 import MainPage from "../../features/MainPage";
+import UpdateParentCategoryPage from "../../features/AdminAuthority/UpdateParentCategoryPage";
+import UpdateCategoryPage from "../../features/AdminAuthority/UpdateCategoryPage";
+
+
 
 const theme = createTheme();
 
@@ -40,8 +44,10 @@ export default function MainLayout() {
                         <Route path="/Products" element={<ProductsPage/>} />
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
                         <Route path="/Product/:productId" element={<ProductCardPage/>} />
-                        <Route path="/ProductAdd" element={<AddproductPage/>} />
-                        <Route path="/ProductUpdate/:productId" element={<UpdateProduct/>} />
+                        <Route path="/ProductAdd" element={<AddProductPage/>} />
+                        <Route path="/ProductUpdate/:productId" element={<UpdateProductPage/>} />
+                        <Route path="/ParentCategoryUpdate/:productId" element={<UpdateParentCategoryPage/>}/>
+                        <Route path="/CategoryUpdate/:productId" element={<UpdateCategoryPage/>}/>
                         <Route path="/Login" element={<LoginPage/>}/>
                         <Route path="/Signup" element={<SignupPage/>}/>
                         <Route path="/Account" element={<AccountPage />}/>

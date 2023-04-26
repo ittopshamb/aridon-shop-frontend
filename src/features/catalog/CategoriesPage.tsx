@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText, Collapse } from "@mui/material";
+import {List, ListItem, ListItemText, Collapse, Button} from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import api from "../Api";
@@ -20,6 +20,22 @@ const CategoriesPage = () => {
     const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
     const [open, setOpen] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
+    const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const [isAdmin,setIsAdmin] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            if(!headers) return;
+            const userResponse = await api.get("/account/get_current", {
+                headers
+            });
+            const isAdmin = !!userResponse.data?.roles?.includes('Admin')
+            setIsAdmin(isAdmin);
+            if(!isAdmin) return null;
+        }
+        fetchData();
+    }, [headers]);
+    
     
     useEffect(() => {
         const fetchCategories = async () => {
@@ -56,6 +72,10 @@ const CategoriesPage = () => {
                     <React.Fragment key={category.categoryId}>
                         <ListItem button onClick={() => handleClick(category.categoryId)}>
                             <ListItemText primary={category.categoryName} />
+                            {isAdmin && (
+                                <Link key={category.categoryId} to={`/ParentCategoryUpdate/${category.categoryId}`}>
+                                    <Button>Edit</Button>
+                                </Link>)}
                             {open.includes(category.categoryId) ? (
                                 <ExpandLess />
                             ) : (
@@ -67,8 +87,12 @@ const CategoriesPage = () => {
                                 {subcategories
                                     .filter((subcategory) => subcategory.parentId === category.categoryId)
                                     .map((subcategory) => (
-                                        <ListItem button key={subcategory.categoryId}>
+                                        <ListItem key={subcategory.categoryId}>
                                             <Link style={{color: "black", margin:"10px"}} to={`/products/${subcategory.categoryId}`} ><ListItemText primary={subcategory.categoryName} /> </Link>
+                                            {isAdmin && (
+                                                <Link key={subcategory.categoryId} to={`/CategoryUpdate/${subcategory.categoryId}`}>
+                                                    <Button>Edit</Button>
+                                                </Link>)}
                                         </ListItem>
                                     ))}
                             </List>
