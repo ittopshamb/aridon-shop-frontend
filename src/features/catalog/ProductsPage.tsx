@@ -19,8 +19,18 @@ const ProductsPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [isAdmin,setIsAdmin] = useState(false);
-    const token = localStorage.getItem("token");
     const perPage = 10;
+
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(!token) {
+            alert("Cannot get user authorization token!");
+            return;
+        }
+        setHeaders({ Authorization: `Bearer ${token}` });
+    }, []);
+    
     
     
     useEffect(() => {
@@ -39,12 +49,9 @@ const ProductsPage = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             const response = await api.get(`/products/get_by_category?categoryId=${categoryId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers
             });
             const data = await response.data;
-            setHeaders({ Authorization: `Bearer ${token}` })
             setProducts(data.products);
             setPageCount(Math.ceil(data.products.length / perPage));
         };
@@ -54,9 +61,7 @@ const ProductsPage = () => {
     const handledRemoveProduct = async (productId: string,event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         await api.delete(`/products/delete_by_id?id=${productId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
+            headers
         });
         setProducts(prevProducts => prevProducts.filter(product => product.productId !== productId));
     };

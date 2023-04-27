@@ -21,9 +21,17 @@ const CategoriesPage = () => {
     const [open, setOpen] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [headers, setHeaders] = useState<{ Authorization: string }>();
-    const token = localStorage.getItem("token");
     const [isAdmin,setIsAdmin] = useState(false);
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if(!token) {
+            alert("Cannot get user authorization token!");
+            return;
+        }
+        setHeaders({ Authorization: `Bearer ${token}` });
+    }, []);
+    
     useEffect(() => {
         async function fetchData() {
             if(!headers) return;
@@ -68,8 +76,7 @@ const CategoriesPage = () => {
     const handledRemoveSubCategory = async (subCategoryId: string,event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         await api.delete(`/categories/delete_by_id?id=${subCategoryId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`},
+            headers
         });
         setSubcategories(prevSubCategory => prevSubCategory.filter(e => e.categoryId !== subCategoryId));
     };
@@ -77,8 +84,7 @@ const CategoriesPage = () => {
     const handleRemoveParentCategory = async (parentCategoryId: string , event: React.MouseEvent<HTMLButtonElement>) =>{
         event.preventDefault();
         await api.delete(`/parentCategories/delete_by_id?id=${parentCategoryId}`,{
-            headers: {
-                Authorization: `Bearer ${token}`},
+            headers
         });
         setCategories(prevParCategory => prevParCategory.filter(e => e.categoryId !== parentCategoryId));
     }

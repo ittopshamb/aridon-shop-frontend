@@ -63,7 +63,7 @@ export default function UpdateParentCategoryPage(): JSX.Element {
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/parentCategories/update?id=${parentCategoryId}$newName=${parentCategory.categoryName}`,{},
+            await api.put(`/parentCategories/update?id=${parentCategoryId}&newName=${parentCategory.categoryName}&CategoryId=${parentCategory.categoryId}`,{parentCategory},
                 {
                     headers
                 });

@@ -60,7 +60,7 @@ export default function UpdateCategoryPage(): JSX.Element{
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/categories/update?id=${categoryId}$newName=${category.categoryName}`,{},
+            await api.put(`/categories/update?id=${categoryId}&newName=${category.categoryName}`,{category},
                 {
                     headers
                 });
