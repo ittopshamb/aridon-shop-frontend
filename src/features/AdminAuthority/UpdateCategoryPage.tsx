@@ -45,12 +45,12 @@ export default function UpdateCategoryPage(): JSX.Element{
         async function fetchData(){
             try{
                 const categoryResponse = await api.get(`/categories/get_by_id?id=${categoryId}`);
-                console.log(categoryResponse.data);
                 setCategory({
                     categoryId: categoryResponse.data.categoryId,
                     parentId: categoryResponse.data.parentId,
                     categoryName: categoryResponse.data.categoryName
                 });
+               
             } catch{
                 alert("Cannot get Parent-Category, please refresh page!");
             }
@@ -60,15 +60,16 @@ export default function UpdateCategoryPage(): JSX.Element{
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/categories/update?id=${categoryId}&newName=${category.categoryName}`,{category},
+            await api.put(`/categories/update?id=${categoryId}&newName=${category.categoryName}`,{},
                 {
                     headers
                 });
+            console.log();
             alert("Changed");
         } catch  {
             alert("Error while creating product!");
         }
-    },[headers]);
+    },[categoryId,headers]);
     
     const createValueChangeHandler = useCallback((key: keyof Category) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {

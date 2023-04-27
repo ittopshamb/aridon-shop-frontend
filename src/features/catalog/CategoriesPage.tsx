@@ -25,10 +25,6 @@ const CategoriesPage = () => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if(!token) {
-            alert("Cannot get user authorization token!");
-            return;
-        }
         setHeaders({ Authorization: `Bearer ${token}` });
     }, []);
     

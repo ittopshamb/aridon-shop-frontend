@@ -78,7 +78,7 @@ export default function UpdateProductPage(): JSX.Element {
             try {
                 const productResponse = await api.get(`/products/get_by_id?id=${productId}`);
                 setProduct({
-                    name: productResponse.data.name,
+                    name: productResponse.data.productName,
                     price: productResponse.data.price,
                     image: productResponse.data.image,
                     description: productResponse.data.description,

@@ -80,12 +80,12 @@ const ProductsPage = () => {
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`₽${product.price}`} />
-                    {isAdmin &&(<RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
-                        Remove
-                    </RemoveButton>)}
                     {isAdmin && (
                         <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>
                             <Button>Edit</Button>
+                            {isAdmin &&(<RemoveButton onClick={event => handledRemoveProduct(product.productId,event)}>
+                                Remove
+                            </RemoveButton>)}
                         </Link>)}
                 </ListItem>
             </Link>

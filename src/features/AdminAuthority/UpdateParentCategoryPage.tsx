@@ -49,7 +49,6 @@ export default function UpdateParentCategoryPage(): JSX.Element {
         async function fetchData(){
             try{
                 const parentResponse = await api.get(`/parentCategories/get_by_id?id=${parentCategoryId}`);
-                console.log(parentResponse.data);
                 setParentCategory({
                     categoryName: parentResponse.data.categoryName,
                     categoryId: parentResponse.data.categoryId
@@ -59,11 +58,18 @@ export default function UpdateParentCategoryPage(): JSX.Element {
             }
         }
         fetchData();
-    },[]);
+    },[parentCategoryId]);
+    
+    const createValueChangeHandler = useCallback((key: keyof ParentCategory) => {
+        return function (event: React.ChangeEvent<HTMLInputElement>) {
+            let value: string | number = event.target.value;
+            setParentCategory(el => ({...el, [key]: value}));
+        }
+    }, [parentCategoryId]);
 
     const handleSubmit = useCallback(async ()=>{
         try{
-            await api.put(`/parentCategories/update?id=${parentCategoryId}&newName=${parentCategory.categoryName}&CategoryId=${parentCategory.categoryId}`,{parentCategory},
+            await api.put(`/parentCategories/update?id=${parentCategoryId}&newName=${parentCategory.categoryName}`,{},
                 {
                     headers
                 });
@@ -72,14 +78,6 @@ export default function UpdateParentCategoryPage(): JSX.Element {
             alert("Error while creating product!");
         }
     },[parentCategoryId, headers]);
-
-    const createValueChangeHandler = useCallback((key: keyof ParentCategory) => {
-        return function (event: React.ChangeEvent<HTMLInputElement>) {
-            let value: string | number = event.target.value;
-            setParentCategory(el => ({...el, [key]: value}));
-        }
-    }, [parentCategoryId]);
-    
     
     if (isAdmin === undefined || parentCategory === undefined) return <div>Loading...</div>;
     if (!isAdmin) return <div>Only admin is allowed to add products!</div>;
