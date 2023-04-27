@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import {Box, Typography} from "@mui/material";
 import api from "../Api"
+import {useNavigate} from "react-router-dom";
 
 type Account = {
     name: string;
@@ -9,7 +10,7 @@ type Account = {
 
 export default function AccountPage() {
     const [account, setAccount] = useState<Account | null>(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchAccount = async () => {
             const token = localStorage.getItem("token");
@@ -20,6 +21,9 @@ export default function AccountPage() {
                 });
                 setAccount(response.data);
             }
+            else {
+                navigate('/login')
+            }
         };
         fetchAccount();
     }, []);
@@ -27,20 +31,20 @@ export default function AccountPage() {
     return (
         <Box>
             <Typography variant="h4" gutterBottom>
-                Account Information
+                Информация об аккаунте
             </Typography>
             {account ? (
                 <Box>
                     <Typography variant="h6" gutterBottom>
-                        Name: {account.name}
+                        Имя: {account.name}
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                        Email: {account.email}
+                        Почта: {account.email}
                     </Typography>
                 </Box>
             ) : (
                 <Typography variant="body1" gutterBottom>
-                    Loading account information...
+                    Загрузка информации об аккаунте...
                 </Typography>
             )}
         </Box>

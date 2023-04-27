@@ -16,22 +16,27 @@ import {useEffect, useState} from "react";
 import {Account} from "../../models";
 import api from "../../features/Api";
 
-
-
-const pages = ['Categories', 'Cart'];
-const settings = ['Account', 'Logout'];
-
+interface Setting {
+    en: string;
+    ru: string;
+}
+// const pages = ['Categories', 'Cart'];
 
 function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<undefined | null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<undefined | null | HTMLElement>(null);
     const [account, setAccount] = useState<Account | null>(null);
     const navigate = useNavigate();
-    
-    
+    const [settings, setSettings] = useState<Setting[]>([]);
+    const [pages] = useState<Setting[]>([{ en: 'Categories', ru: 'Каталог' }, { en: 'Cart', ru: 'Корзина' }]);
+
+    const token = localStorage.getItem("token");
+
+
     useEffect(() => {
         const fetchAccount = async () => {
             const token = localStorage.getItem("token");
+            setSettings([{ en: 'Account', ru: 'Профиль' }, { en: 'Logout', ru: 'Выход' }]);
             if (token) {
                 const headers = { Authorization: `Bearer ${token}` };
                 const response = await api.get("/account/get_current", {
@@ -44,9 +49,21 @@ function ResponsiveAppBar() {
     }, []);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        if(!token) {
+            setSettings([{en: 'SignUp', ru: 'Регистрация'},{en: 'Login', ru: 'Вход'}]);
+        }
+        else {
+            setSettings([{en: 'Account', ru: 'Профиль' }, {en: 'Logout', ru: 'Выход' }]);
+        }
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        if(!token) {
+            setSettings([{en: 'SignUp', ru: 'Регистрация'},{en: 'Login', ru: 'Вход'}]);
+        }
+        else {
+            setSettings([{en: 'Account', ru: 'Профиль'},{en: 'Logout', ru: 'Выход'}]);
+        }
         setAnchorElUser(event.currentTarget);
     };
 
@@ -62,6 +79,7 @@ function ResponsiveAppBar() {
         try {
             localStorage.removeItem("token");
             setAccount(null);
+            setSettings([{en: 'SignUp', ru: 'Регистрация'},{en: 'Login', ru: 'Вход'}]);
             navigate("/login");
         } catch (error) {
             console.error(error);
@@ -93,7 +111,7 @@ function ResponsiveAppBar() {
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            
+
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -114,8 +132,8 @@ function ResponsiveAppBar() {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                <MenuItem key={page.en} onClick={handleCloseNavMenu}>
+                                    <Typography textAlign="center">{page.ru}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -141,25 +159,21 @@ function ResponsiveAppBar() {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Link className={"link"} key={page} to={`/${page}`}
+                            <Link className={"link"} key={page.en} to={`/${page.en}`}
                                 // sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {page}
+                                {page.ru}
                             </Link>
                         ))}
                     </Box>
-                    <Typography>
-                        {account ? (
-                            <Link
-                                style={linkStyles} to={`/Account`}>
-                                {account.email} 
-                            </Link>
-                        ) : (
-                            <Link style={linkStyles} to={`/Login`}>
-                                Login
-                            </Link>
-                        )}
-                    </Typography>
+                    {/*<Typography>*/}
+                    {/*    {account ? (*/}
+                    {/*        <Link*/}
+                    {/*            style={linkStyles} to={`/Account`}>*/}
+                    {/*            {account.email} */}
+                    {/*        </Link>*/}
+                    {/*    ) : null}*/}
+                    {/*</Typography>*/}
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -183,12 +197,11 @@ function ResponsiveAppBar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
-                                    <Link style={{color: "black", margin: "10px"}} key={setting} to={`/${setting}`}>
-                                        {setting}
+                                <MenuItem key={setting.en} onClick={setting.en === "Logout" ? handleLogout : handleCloseUserMenu}>
+                                    <Link style={{color: "black", margin: "10px"}} key={setting.en} to={`/${setting.en}`}>
+                                        {setting.ru}
                                     </Link>
-                                </MenuItem>
-                            ))}
+                                </MenuItem>))}
                         </Menu>
                     </Box>
                 </Toolbar>

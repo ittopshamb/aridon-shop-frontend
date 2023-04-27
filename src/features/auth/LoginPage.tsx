@@ -2,7 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
-    Avatar,
     Box,
     Button,
     Container,
@@ -11,7 +10,6 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import api from "../Api";
 
 
@@ -43,11 +41,8 @@ export default function LoginPage() {
 
     return (
         <Container component="main" maxWidth="xs">
-            <Avatar sx={{m: 1, bgcolor: "secondary.main"}}>
-                <LockOutlinedIcon/>
-            </Avatar>
             <Typography component="h1" variant="h5">
-                Sign in
+                Вход
             </Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
                 <TextField
@@ -55,7 +50,7 @@ export default function LoginPage() {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="Эл. адрес"
                     autoComplete="email"
                     autoFocus
                     {...register("email")}
@@ -64,19 +59,19 @@ export default function LoginPage() {
                     margin="normal"
                     required
                     fullWidth
-                    label="Password"
+                    label="Пароль"
                     type="password"
                     id="password"
                     autoComplete="current-password"
                     {...register("password")}
                 />
                 <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
-                    Sign In
+                    Войти
                 </Button>
                 <Grid container>
                     <Grid item>
-                        <Link href="/signup" variant="body2" sx={{ml:12,mr:12}}>
-                            {"Don't have an account? Sign Up"}
+                        <Link href="/aridon-shop-frontend/SignUp" variant="body2" sx={{ml:12,mr:12}}>
+                            {"Нет аккаунта? Регистрация"}
                         </Link>
                     </Grid>
                 </Grid>

@@ -15,7 +15,6 @@ import api from "../Api";
 
 interface SignupForm {
     name: string;
-    surname: string;
     email: string;
     password: string;
 }
@@ -23,9 +22,7 @@ interface SignupForm {
 export default function SignupPage() {
     const {register, handleSubmit} = useForm<SignupForm>();
     const navigate = useNavigate();
-
-  
-
+    
     const onSubmit = async (data: SignupForm) => {
         try {
             const response = await api.post("/account/register", data);
@@ -39,15 +36,15 @@ export default function SignupPage() {
     return (
         <Container component="main" maxWidth="xs">
             <Typography component="h1" variant="h5">
-                Sign up
+                Регистрация
             </Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{mt: 1}}>
-            <TextField
+                <TextField
                     margin="normal"
                     required
                     fullWidth
                     id="name"
-                    label="User Name"
+                    label="Имя пользователя"
                     autoComplete="name"
                     autoFocus
                     {...register("name")}
@@ -57,7 +54,7 @@ export default function SignupPage() {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="Эл. адрес"
                     autoComplete="email"
                     autoFocus
                     {...register("email")}
@@ -66,19 +63,19 @@ export default function SignupPage() {
                     margin="normal"
                     required
                     fullWidth
-                    label="Password"
+                    label="Пароль"
                     type="password"
                     id="password"
                     autoComplete="current-password"
                     {...register("password")}
                 />
                 <Button type="submit" fullWidth variant="contained" sx={{mt: 3, mb: 2}}>
-                    Sign up
+                    Зарегистрироваться
                 </Button>
                 <Grid container>
                     <Grid item>
-                        <Link href="/Login" variant="body2" >
-                            {"Already have an account? Sign in"}
+                        <Link href="/aridon-shop-frontend/Login" variant="body2" sx={{ml:14,mr:12}}>
+                            {"Уже есть аккаунт? Войти"}
                         </Link>
                     </Grid>
                 </Grid>
