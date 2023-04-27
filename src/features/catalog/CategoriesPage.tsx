@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import {List, ListItem, ListItemText, Collapse, Button} from "@mui/material";
+import {List, ListItem, ListItemText, Collapse, Button, styled} from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import api from "../Api";
@@ -21,7 +21,8 @@ const CategoriesPage = () => {
     const [open, setOpen] = useState<string[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [headers, setHeaders] = useState<{ Authorization: string }>();
-    const [isAdmin,setIsAdmin] = useState(true);
+    const token = localStorage.getItem("token");
+    const [isAdmin,setIsAdmin] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -64,6 +65,23 @@ const CategoriesPage = () => {
             }
         });
     };
+    const handledRemoveSubCategory = async (subCategoryId: string,event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        await api.delete(`/categories/delete_by_id?id=${subCategoryId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`},
+        });
+        setSubcategories(prevSubCategory => prevSubCategory.filter(e => e.categoryId !== subCategoryId));
+    };
+    
+    const handleRemoveParentCategory = async (parentCategoryId: string , event: React.MouseEvent<HTMLButtonElement>) =>{
+        event.preventDefault();
+        await api.delete(`/parentCategories/delete_by_id?id=${parentCategoryId}`,{
+            headers: {
+                Authorization: `Bearer ${token}`},
+        });
+        setCategories(prevParCategory => prevParCategory.filter(e => e.categoryId !== parentCategoryId));
+    }
     
     return (
         <div>
@@ -76,6 +94,9 @@ const CategoriesPage = () => {
                                 <Link key={category.categoryId} to={`/ParentCategoryUpdate/${category.categoryId}`}>
                                     <Button>Edit</Button>
                                 </Link>)}
+                            {isAdmin &&(<RemoveButton onClick={event => handleRemoveParentCategory(category.categoryId,event)}>
+                                Remove
+                            </RemoveButton>)}
                             {open.includes(category.categoryId) ? (
                                 <ExpandLess />
                             ) : (
@@ -93,6 +114,9 @@ const CategoriesPage = () => {
                                                 <Link key={subcategory.categoryId} to={`/CategoryUpdate/${subcategory.categoryId}`}>
                                                     <Button>Edit</Button>
                                                 </Link>)}
+                                            {isAdmin &&(<RemoveButton onClick={event => handledRemoveSubCategory(subcategory.categoryId,event)}>
+                                                Remove
+                                            </RemoveButton>)}
                                         </ListItem>
                                     ))}
                             </List>
@@ -103,5 +127,10 @@ const CategoriesPage = () => {
         </div>
     );
 };
-
+const RemoveButton = styled(Button)({
+    color: "#f44336",
+    "&:hover": {
+        backgroundColor: "#f44336",
+        color: "#fff"
+    }});
 export default CategoriesPage;
