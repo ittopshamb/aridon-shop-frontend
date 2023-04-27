@@ -74,6 +74,7 @@ const CartPage = () => {
     }, [cartItems]);
 
     const handleRemoveFromCart = async (id: string) => {
+        
         const response = await api.delete(`/cart/delete_item?id=${id}&quantity=1`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -91,7 +92,7 @@ const CartPage = () => {
             }
         }).filter(item => item.quantity > 0);
         setCartItems(updatedItems);
-        navigate('/Cart')
+        navigate('/Cart');
     };
 
     const getTotalPrice = (): number => {

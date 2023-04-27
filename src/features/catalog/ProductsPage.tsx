@@ -21,7 +21,8 @@ const ProductsPage = () => {
     const [isAdmin,setIsAdmin] = useState(false);
     const token = localStorage.getItem("token");
     const perPage = 10;
-
+    
+    
     useEffect(() => {
         async function fetchData() {
             if(!headers) return;

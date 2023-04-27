@@ -24,7 +24,7 @@ type Category = {
     categoryName: string,
 }
 
-const AddProduct = () => {
+export default function AddProductPage(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [categories, setCategories] = useState<Category[]>()
@@ -133,5 +133,3 @@ const AddProduct = () => {
         </form>
     );
 }
-
-export default AddProduct;

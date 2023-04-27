@@ -26,7 +26,7 @@ type Category = {
     categoryName: string,
 }
 
-export default function UpdateProduct(): JSX.Element {
+export default function UpdateProductPage(): JSX.Element {
     const {productId} = useParams<{ productId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
@@ -65,7 +65,7 @@ export default function UpdateProduct(): JSX.Element {
                 const categories = categoriesResponse.data.categories;
                 setCategories(categories);
             } catch {
-                alert("Cannot get categories, please refresh page!")
+                alert("Cannot get categories, please refresh page!");
             }
         }
 
@@ -110,6 +110,7 @@ export default function UpdateProduct(): JSX.Element {
                 {
                     headers
                 });
+            alert("Changed");
         } catch {
             alert("Error while creating product!");
         }
