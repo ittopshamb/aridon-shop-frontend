@@ -1,4 +1,4 @@
-﻿﻿import React from "react";
+﻿import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -24,16 +24,11 @@ export default function SignupPage() {
     const {register, handleSubmit} = useForm<SignupForm>();
     const navigate = useNavigate();
 
-    React.useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            navigate("/account");
-        }
-    }, [navigate]);
+  
 
     const onSubmit = async (data: SignupForm) => {
         try {
-            const response = await api.post("/account/regustration", data);
+            const response = await api.post("/account/register", data);
             localStorage.setItem("token", response.data.token);
             navigate("/account");
         } catch (error) {
@@ -56,16 +51,6 @@ export default function SignupPage() {
                     autoComplete="name"
                     autoFocus
                     {...register("name")}
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="surname"
-                    label="User Surname"
-                    autoComplete="surname"
-                    autoFocus
-                    {...register("surname")}
                 />
                 <TextField
                     margin="normal"
