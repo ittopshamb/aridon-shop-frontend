@@ -9,7 +9,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import api from "../Api";
 
 
@@ -30,6 +30,7 @@ export default function UpdateProductPage(): JSX.Element {
     const {productId} = useParams<{ productId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const navigate = useNavigate();
     const [categories, setCategories] = useState<Category[]>()
     const [product, setProduct] = useState<Product>({
         name: "",
@@ -42,7 +43,7 @@ export default function UpdateProductPage(): JSX.Element {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Cannot get user authorization token!");
+            alert("Невозможно получить токен авторизации пользователя!");
             return;
         }
         setHeaders({Authorization: `Bearer ${token}`});
@@ -65,7 +66,7 @@ export default function UpdateProductPage(): JSX.Element {
                 const categories = categoriesResponse.data.categories;
                 setCategories(categories);
             } catch {
-                alert("Cannot get categories, please refresh page!");
+                alert("Невозможно получить категории. Обновите страницу!");
             }
         }
 
@@ -85,7 +86,7 @@ export default function UpdateProductPage(): JSX.Element {
                     categoryId: productResponse.data.categoryId
                 });
             } catch {
-                alert("Cannot get product, please refresh page!");
+                alert("Невозможно получить продукт. Обновите страницу!");
             }
         }
 
@@ -110,9 +111,10 @@ export default function UpdateProductPage(): JSX.Element {
                 {
                     headers
                 });
-            alert("Changed");
+            alert("Изменено");
+            navigate('/Categories');
         } catch {
-            alert("Error while creating product!");
+            alert("Ошибка при изменении продукта!");
         }
     }, [product, productId, headers]);
     
@@ -121,22 +123,22 @@ export default function UpdateProductPage(): JSX.Element {
     return (
         <form>
             <Typography variant="h4" gutterBottom>
-                Edit Product
+                Изменение товара
             </Typography>
             <ListItem>
-                <TextField required id="outlined-basic" label="Name" variant="outlined" value={product.name}
+                <TextField sx={{width: '100%'}} required id="outlined-basic" label="Name" variant="outlined" value={product.name}
                            onChange={createValueChangeHandler('name')}/>
             </ListItem>
             <ListItem>
-                <TextField required id="outlined-basic" label="Price" variant="outlined" type="number"
+                <TextField sx={{width: '100%'}} required id="outlined-basic" label="Price" variant="outlined" type="number"
                            value={product.price} onChange={createValueChangeHandler('price')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Image_Url" variant="outlined" value={product.image}
+                <TextField sx={{width: '100%'}} id="outlined-basic" label="Image_Url" variant="outlined" value={product.image}
                            onChange={createValueChangeHandler('image')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Description" variant="outlined" value={product.description}
+                <TextField sx={{width: '100%'}} id="outlined-basic" label="Description" variant="outlined" value={product.description}
                            onChange={createValueChangeHandler('description')}/>
             </ListItem>
             <ListItem>
@@ -155,7 +157,7 @@ export default function UpdateProductPage(): JSX.Element {
                 </FormControl>
             </ListItem>
             <ListItem>
-                <Button onClick={handleSubmit} variant="contained" size="large" sx={{mt: 3}}>
+                <Button onClick={handleSubmit} variant="contained" size="large" sx={{mt: 3, ml: 6}}>
                     Change Product
                 </Button>
             </ListItem>

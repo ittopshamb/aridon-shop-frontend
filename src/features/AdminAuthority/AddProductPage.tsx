@@ -10,6 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import api from "../Api";
+import {useNavigate} from "react-router-dom";
 
 type Product = {
     name: string;
@@ -27,6 +28,7 @@ type Category = {
 export default function AddProductPage(): JSX.Element {
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const navigate = useNavigate();
     const [categories, setCategories] = useState<Category[]>()
     const [product, setProduct] = useState<Product>({
         name: "",
@@ -39,7 +41,7 @@ export default function AddProductPage(): JSX.Element {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if(!token) {
-            alert("Cannot get user authorization token!");
+            alert("Невозможно получить токен авторизации пользователя!");
             return;
         }
         setHeaders({ Authorization: `Bearer ${token}` });
@@ -62,7 +64,7 @@ export default function AddProductPage(): JSX.Element {
                 const categories = categoriesResponse.data.categories;
                 setCategories(categories);
             } catch {
-                alert("Cannot get categories, please refresh page!")
+                alert("Невозможно получить категории, обновите страницу!")
             }
         }
 
@@ -83,11 +85,12 @@ export default function AddProductPage(): JSX.Element {
 
     const handleSubmit = useCallback(async () => {
         try {
-            await api.post(`/products/add?Name=${product.name}
-            &Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, null,{headers});
-            alert("Added");
+            console.log(product);
+            await api.post(`/products/add?Name=${product.name}&Price=${product.price}&Image=${product.image}&Description=${product.description}&CategoryId=${product.categoryId}`, null,{headers});
+            alert("Добавлено");
+            navigate('/Categories')
         } catch {
-            alert("Error while creating product!");
+            alert("Ошибка при добавлении товара!");
         }
     }, [product, headers])
 
@@ -96,19 +99,19 @@ export default function AddProductPage(): JSX.Element {
     return (
         <form>
             <Typography variant="h4" gutterBottom>
-                Add Product
+                Добавление продукта
             </Typography>
             <ListItem>
-                <TextField required id="outlined-basic" label="Name" variant="outlined" value={product.name} onChange={createValueChangeHandler('name')}/>
+                <TextField sx={{width:'100%'}} required id="outlined-basic" label="Name" variant="outlined" value={product.name} onChange={createValueChangeHandler('name')}/>
             </ListItem>
             <ListItem>
-                <TextField required id="outlined-basic" label="Price" variant="outlined" type="number" value={product.price} onChange={createValueChangeHandler('price')}/>
+                <TextField sx={{width:'100%'}} required id="outlined-basic" label="Price" variant="outlined" type="number" value={product.price} onChange={createValueChangeHandler('price')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Image_Url" variant="outlined" value={product.image} onChange={createValueChangeHandler('image')}/>
+                <TextField sx={{width:'100%'}} id="outlined-basic" label="Image_Url" variant="outlined" value={product.image} onChange={createValueChangeHandler('image')}/>
             </ListItem>
             <ListItem>
-                <TextField id="outlined-basic" label="Description" variant="outlined" value={product.description} onChange={createValueChangeHandler('description')}/>
+                <TextField sx={{width:'100%'}} id="outlined-basic" label="Description" variant="outlined" value={product.description} onChange={createValueChangeHandler('description')}/>
             </ListItem>
             <ListItem>
                 <FormControl fullWidth>
@@ -125,8 +128,8 @@ export default function AddProductPage(): JSX.Element {
                 </FormControl>
             </ListItem>
             <ListItem>
-                <Button onClick={handleSubmit} variant="contained" size="large" sx={{ mt: 3 }}>
-                    Add Product
+                <Button onClick={handleSubmit} variant="contained" size="large" sx={{ mt: 3,ml:12 }}>
+                    Добавить
                 </Button>
             </ListItem>
 

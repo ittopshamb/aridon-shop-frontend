@@ -87,6 +87,18 @@ const CategoriesPage = () => {
     
     return (
         <div>
+            {isAdmin && (
+                <div>
+                    <Link to={`/ParentCategoriesAdd`}>
+                        <Button>Add Category</Button>
+                    </Link>
+                    <Link to={`/CategoriesAdd`}>
+                        <Button>Add Subcategory</Button>
+                    </Link>
+                    <Link to={`/ProductAdd`}>
+                        <Button>Add product</Button>
+                    </Link>
+                </div>)}
             <List>
                 {categories.map((category) => (
                     <React.Fragment key={category.categoryId}>

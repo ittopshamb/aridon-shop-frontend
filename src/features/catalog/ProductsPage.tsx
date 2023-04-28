@@ -19,19 +19,13 @@ const ProductsPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [headers, setHeaders] = useState<{ Authorization: string }>();
     const [isAdmin,setIsAdmin] = useState(false);
-    const perPage = 10;
+    const perPage = 5;
 
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if(!token) {
-            alert("Cannot get user authorization token!");
-            return;
-        }
         setHeaders({ Authorization: `Bearer ${token}` });
     }, []);
-    
-    
     
     useEffect(() => {
         async function fetchData() {
@@ -78,7 +72,7 @@ const ProductsPage = () => {
         .map((product) => (
             <Link key={product.productId} to={`/product/${product.productId}`}>
                 <ListItem>
-                    <img src={product.image} alt={product.productName} style={{ width: 80, height: 80, marginRight: 16 }} />
+                    <img src={product.image} alt={product.productName} style={{ width: 60, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`₽${product.price}`} />
                     {isAdmin && (
                         <Link key={product.productId} to={`/ProductUpdate/${product.productId}`}>

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Account} from "../../models";
 import api from "../../features/Api";
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 interface Setting {
     en: string;
@@ -90,7 +91,7 @@ function ResponsiveAppBar() {
         <AppBar position="fixed">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <AutoStoriesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, mb: 0.5 }}></AutoStoriesIcon>
                     <Link className={"link"} to="/" style={{
                         fontFamily: 'monospace',
                         fontWeight: 700,
