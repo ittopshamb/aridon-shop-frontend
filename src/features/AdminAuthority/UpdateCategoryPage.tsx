@@ -1,6 +1,6 @@
 ﻿import {Button, ListItem, TextField, Typography} from "@mui/material";
 import React, {useCallback, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import api from "../Api";
 
 
@@ -13,6 +13,7 @@ export default function UpdateCategoryPage(): JSX.Element{
     const {categoryId} = useParams<{ categoryId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const navigate = useNavigate();
     const [category,setCategory] = useState<Category>({
         categoryId:"",
         parentId:"",
@@ -21,7 +22,7 @@ export default function UpdateCategoryPage(): JSX.Element{
     useEffect(()=>{
         const token = localStorage.getItem("token");
         if(!token){
-            alert("Cannot get user authorization token!");
+            alert("Невозможно получить токен авторизации пользователя!");
             return;
         }
         setHeaders({Authorization: `Bearer ${token}`});
@@ -52,7 +53,7 @@ export default function UpdateCategoryPage(): JSX.Element{
                 });
                
             } catch{
-                alert("Cannot get Parent-Category, please refresh page!");
+                alert("Невозможно получить категории. Обновите страницу!");
             }
         }
         fetchData();
@@ -64,10 +65,10 @@ export default function UpdateCategoryPage(): JSX.Element{
                 {
                     headers
                 });
-            console.log();
-            alert("Changed");
+            alert("Изменено");
+            navigate('/Categories')
         } catch  {
-            alert("Error while creating product!");
+            alert("Ошибка при изменении категории!");
         }
     },[categoryId,headers]);
     
@@ -82,10 +83,10 @@ export default function UpdateCategoryPage(): JSX.Element{
     if (!isAdmin) return <div>Only admin is allowed to add products!</div>;
     return (<form>
         <Typography variant="h4" gutterBottom>
-            Edit Category
+            Изменение категории
         </Typography>
         <ListItem>
-            <TextField required id="outlined-basic" label="Name" variant="outlined" value={category.categoryName}
+            <TextField sx={{width: '100%'}} required id="outlined-basic" label="Name" variant="outlined" value={category.categoryName}
                        onChange={createValueChangeHandler('categoryName')}/>
         </ListItem>
         <Button onClick={handleSubmit} variant="contained" size="large" sx={{mt: 3}}>
