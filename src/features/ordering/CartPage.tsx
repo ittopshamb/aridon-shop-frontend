@@ -4,12 +4,12 @@ import {
     Box,
     Card,
     CardContent,
-    CardMedia,
     Typography,
-    Button, styled, Stack, Pagination, List, ListItem, Modal, TextField, Alert
+    Button, styled, Stack, Pagination, List, ListItem, Modal, TextField
 } from '@mui/material';
 import api from "../Api";
 import { Link, useNavigate } from "react-router-dom";
+
 
 type CartItem = {
     id: string;
@@ -32,6 +32,7 @@ const CartPage = () => {
     const [pageCount, setPageCount] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [isOrdering, setIsOrdering] = useState<boolean>(false);
+    const [isOrdered, setIsOrdered] = useState<boolean>(false);
     const [city, setCity] = useState<string>('');
     const [address, setAddress] = useState<string>('');
     const navigate = useNavigate();
@@ -53,6 +54,7 @@ const CartPage = () => {
                 const data = await response.data;
                 setCartItems(data.items);
                 setIsOrdering(false);
+                setIsOrdered(false);
             };
             fetchCart();
         }
@@ -124,8 +126,12 @@ const CartPage = () => {
             }
         });
         setIsOrdering(false);
-        navigate('/');
+        setIsOrdered(true);
     };
+    
+    const HandleCloseModal = () => {
+        navigate('/');
+    }
 
     const handleBuyClick = () => {
         setIsOrdering(true);
@@ -164,6 +170,7 @@ const CartPage = () => {
                     p: 2,
                     width: 400,
                     borderRadius: '10px',
+                    borderColor: '#1976d2',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -183,16 +190,45 @@ const CartPage = () => {
                     </form>
                 </Box>
             </Modal>
+            <Modal style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }} open={isOrdered} onClose={() => setIsOrdered(false)}
+                   aria-labelledby="modal-modal-title"
+                   aria-describedby="modal-modal-description">
+                <Box sx={{
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 2,
+                    width: 400,
+                    borderRadius: '10px',
+                    borderColor: '#1976d2',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <form>
+                        <Typography variant="h4" gutterBottom>
+                            Заказ оформлен.
+                        </Typography>
+                        <Button onClick={HandleCloseModal} variant="contained" size="large" sx={{mt: 3, ml: 10}}>
+                            Закрыть
+                        </Button>
+                    </form>
+                </Box>
+            </Modal>
             <Container sx={{display:'flex', flexWrap:'wrap', justifyContent:'center'}} maxWidth="sm">
                 {getPaginatedItems().map(product => {
                     const item = cartItems.find(item => item.productId === product.productId);
                     if (item) {
                         return (
                             <Link key={product.productId} to={`/product/${product.productId}`}>
-                                <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px' }}>
-                                    <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
-                                    <CardContent sx={{width:'200px',height:'400px'}}>
-                                        <Typography gutterBottom variant="h5" component="div">
+                                <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'450px', margin: '20px' }}>
+                                    <img src={product.image} alt={product.productName} style={{ width: 140, height: 200, paddingTop:5}}/>
+                                    <CardContent sx={{width:'200px',height:'450px'}}>
+                                        <Typography gutterBottom variant="h5" component="div" sx={{fontSize:15}}>
                                             {product.productName}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">

@@ -5,7 +5,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import api from "../Api";
 
 type ParentCategory = {
@@ -17,6 +17,7 @@ export default function UpdateParentCategoryPage(): JSX.Element {
     const {parentCategoryId} = useParams<{ parentCategoryId: string }>();
     const [isAdmin, setIsAdmin] = useState<boolean>();
     const [headers, setHeaders] = useState<{ Authorization: string }>();
+    const navigate = useNavigate();
     const [parentCategory,setParentCategory] = useState<ParentCategory>({
         categoryId:"",
         categoryName:"",
@@ -25,7 +26,7 @@ export default function UpdateParentCategoryPage(): JSX.Element {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Cannot get user authorization token!");
+            alert("Невозможно получить токен авторизации пользователя!");
             return;
         }
         setHeaders({Authorization: `Bearer ${token}`});
@@ -54,7 +55,7 @@ export default function UpdateParentCategoryPage(): JSX.Element {
                     categoryId: parentResponse.data.categoryId
                 });
             } catch{
-                alert("Cannot get Parent-Category, please refresh page!");
+                alert("Невозможно получить род. категорию. Обновите страницу!");
             }
         }
         fetchData();
@@ -73,20 +74,21 @@ export default function UpdateParentCategoryPage(): JSX.Element {
                 {
                     headers
                 });
-            alert("Changed");
+            alert("Изменено");
+            navigate('/Categories');
         } catch  {
-            alert("Error while creating product!");
+            alert("Ошибка при изменении род. категории!");
         }
-    },[parentCategoryId, headers]);
+    },[parentCategory, parentCategoryId, headers]);
     
     if (isAdmin === undefined || parentCategory === undefined) return <div>Loading...</div>;
     if (!isAdmin) return <div>Only admin is allowed to add products!</div>;
     return (<form>
         <Typography variant="h4" gutterBottom>
-            Edit Parent-Category
+            Изменение род. категории
         </Typography>
         <ListItem>
-            <TextField required id="outlined-basic" label="Name" variant="outlined" value={parentCategory.categoryName}
+            <TextField sx={{width: '100%'}} required id="outlined-basic" label="Name" variant="outlined" value={parentCategory.categoryName}
                        onChange={createValueChangeHandler('categoryName')}/>
         </ListItem>
         <Button onClick={handleSubmit} variant="contained" size="large" sx={{mt: 3}}>

@@ -59,13 +59,13 @@ const MainPage = () => {
                 if (product) {
                     return (
                         <Link key={product.productId} to={`/product/${product.productId}`}>
-                            <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px' }}>
-                                <CardMedia component="img" height="200" image={product.image} alt={product.productName} />
+                            <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px'}}>
+                                <img src={product.image} alt={product.productName} style={{ width: 140, height: 200, paddingTop:5}}/>
                                 <CardContent sx={{width:'200px',height:'400px'}}>
-                                    <Typography gutterBottom variant="h5" component="div">
+                                    <Typography gutterBottom variant="h5" component="div" sx={{fontSize:17}}>
                                         {product.productName}
                                     </Typography>
-                                    <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem' }}>
+                                    <Typography variant="h6" color="text.secondary" sx={{ marginTop: '1rem', bottom: 0}}>
                                         Цена: ₽{product.price}
                                     </Typography>
                                 </CardContent>
@@ -77,7 +77,7 @@ const MainPage = () => {
                 }
             })}
         </Container>
-        <List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', bottom: '40px', width: '100%', left: '91%', transform: 'translateX(-50%)'}}>
+        <List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', bottom: '40px', width: '100%', left: '85%', transform: 'translateX(-50%)'}}>
             <ListItem>
                 <StyledStack spacing={2}>
                     <Pagination

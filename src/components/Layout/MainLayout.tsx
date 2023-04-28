@@ -19,8 +19,8 @@ import UpdateProductPage from "../../features/AdminAuthority/UpdateProductPage";
 import MainPage from "../../features/MainPage";
 import UpdateParentCategoryPage from "../../features/AdminAuthority/UpdateParentCategoryPage";
 import UpdateCategoryPage from "../../features/AdminAuthority/UpdateCategoryPage";
-
-
+import AddParentCategoryPage from "../../features/AdminAuthority/AddParentCategoryPage";
+import AddCategoryPage from "../../features/AdminAuthority/AddCategoryPage";
 
 const theme = createTheme();
 
@@ -45,6 +45,8 @@ export default function MainLayout() {
                         <Route path="/Products/:categoryId" element={<ProductsPage/>} />
                         <Route path="/Product/:productId" element={<ProductCardPage/>} />
                         <Route path="/ProductAdd" element={<AddProductPage/>} />
+                        <Route path="/ParentCategoriesAdd" element={<AddParentCategoryPage/>} />
+                        <Route path="/CategoriesAdd" element={<AddCategoryPage/>} />
                         <Route path="/ProductUpdate/:productId" element={<UpdateProductPage/>} />
                         <Route path="/ParentCategoryUpdate/:parentCategoryId" element={<UpdateParentCategoryPage/>}/>
                         <Route path="/CategoryUpdate/:categoryId" element={<UpdateCategoryPage/>}/>
