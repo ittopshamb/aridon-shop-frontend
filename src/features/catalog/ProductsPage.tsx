@@ -70,7 +70,7 @@ const ProductsPage = () => {
     const currentProducts = products
         .slice(offset, offset + perPage)
         .map((product) => (
-            <Link key={product.productId} to={`/product/${product.productId}`}>
+            <Link style={{color: "black", margin:"10px"}} key={product.productId} to={`/product/${product.productId}`}>
                 <ListItem>
                     <img src={product.image} alt={product.productName} style={{ width: 60, height: 80, marginRight: 16 }} />
                     <ListItemText primary={product.productName} secondary={`₽${product.price}`} />

@@ -70,7 +70,7 @@ export default function UpdateCategoryPage(): JSX.Element{
         } catch  {
             alert("Ошибка при изменении категории!");
         }
-    },[categoryId,headers]);
+    },[category,categoryId,headers]);
     
     const createValueChangeHandler = useCallback((key: keyof Category) => {
         return function (event: React.ChangeEvent<HTMLInputElement>) {

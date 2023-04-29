@@ -60,8 +60,8 @@ const MainPage = () => {
                     return (
                         <Link key={product.productId} to={`/product/${product.productId}`}>
                             <Card key={product.productId} sx={{ maxWidth: '200px',maxHeight:'386px', margin: '20px'}}>
-                                <img src={product.image} alt={product.productName} style={{ width: 140, height: 200, paddingTop:5}}/>
-                                <CardContent sx={{width:'200px',height:'400px'}}>
+                                <CardContent sx={{width:'200px',height:'400px', display:'flex',flexDirection:'column', alignItems:'center', justifyContent:'space-between'}}>
+                                    <img src={product.image} alt={product.productName} style={{ width: 140, height: 200, paddingTop:5}}/>
                                     <Typography gutterBottom variant="h5" component="div" sx={{fontSize:17}}>
                                         {product.productName}
                                     </Typography>

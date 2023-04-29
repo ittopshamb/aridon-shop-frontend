@@ -13,18 +13,26 @@ export default function Footer(props: FooterProps) {
   const { description, title } = props;
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6, position: 'sticky', bottom: 0, left: 0, width: '100%' }}>
+    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6, position: 'static', bottom: 0, left: 0, width: '100%',height:'200px' }}>
       <Container maxWidth="lg">
-        <Typography variant="h6" align="center" gutterBottom>
-          {title}
-        </Typography>
+        {/*<Typography variant="h6" align="center" gutterBottom>*/}
+        {/*  {title}*/}
+        {/*</Typography>*/}
         <Typography
           variant="subtitle1"
           align="center"
           color="text.secondary"
           component="p"
         >
-          {description}
+          Contacts: <a href="mailto:aridonshop@gmail.com">aridonshop@gmail.com</a>
+        </Typography>
+        <Typography
+            variant="subtitle1"
+            align="center"
+            color="text.secondary"
+            component="p"
+        >
+          @2023 ittopshamb | All Rights Reserved
         </Typography>
       </Container>
     </Box>

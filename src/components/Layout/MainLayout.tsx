@@ -29,7 +29,7 @@ export default function MainLayout() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Container maxWidth="lg">
+            <Container maxWidth="100%">
                 <Router basename={import.meta.env.BASE_URL}>
                     <Header />
                     <main>
