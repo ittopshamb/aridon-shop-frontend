@@ -1,5 +1,5 @@
-﻿import { useEffect, useState } from "react";
-import {Box, Typography} from "@mui/material";
+﻿import React, { useEffect, useState } from "react";
+import {Box, Card, CardContent, Typography} from "@mui/material";
 import api from "../Api"
 import {useNavigate} from "react-router-dom";
 
@@ -34,14 +34,17 @@ export default function AccountPage() {
                 Информация об аккаунте
             </Typography>
             {account ? (
-                <Box>
-                    <Typography variant="h6" gutterBottom>
-                        Имя: {account.name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                        Почта: {account.email}
-                    </Typography>
-                </Box>
+                <Card sx={{mb:5,mt:5}}>
+                    <CardContent>
+                        <img src="../../../public/user.png" alt={"user avatar"} style={{ width: 128, height: 128, position: 'relative', right:0}}/>
+                        <Typography gutterBottom variant="h5" component="div" sx={{fontSize:15, left:0, position:'relative'}}>
+                            {account.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {account.email}
+                        </Typography>
+                    </CardContent>
+                </Card>
             ) : (
                 <Typography variant="body1" gutterBottom>
                     Загрузка информации об аккаунте...

@@ -37,7 +37,8 @@ const CartPage = () => {
     const [address, setAddress] = useState<string>('');
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    const perPage = 10;
+    const perPage = 4;
+    const [paginate, setPaginate] = useState(false);
 
     useEffect(() => {
         if(!token) {
@@ -72,6 +73,7 @@ const CartPage = () => {
         };
         if (cartItems.length > 0) {
             fetchProducts();
+            setPaginate(true);
         }
     }, [cartItems]);
 
@@ -156,6 +158,9 @@ const CartPage = () => {
     };
 
     return (<>
+            <Typography variant="h4" gutterBottom sx={{mt:2}}>
+                Корзина
+            </Typography>
             <Modal style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -265,17 +270,19 @@ const CartPage = () => {
                             Купить
                         </Button>
                     </ListItem>
-                    <ListItem>
-                        <StyledStack spacing={2}>
-                            <Pagination
-                                count={pageCount}
-                                variant="outlined"
-                                shape="rounded"
-                                page={currentPage + 1}
-                                onChange={handlePageChange}
-                            />
-                        </StyledStack>
-                    </ListItem>
+                    {paginate && (
+                        <ListItem>
+                            <StyledStack sx={{ml:'12px'}} spacing={2}>
+                                <Pagination
+                                    count={pageCount}
+                                    variant="outlined"
+                                    shape="rounded"
+                                    page={currentPage + 1}
+                                    onChange={handlePageChange}
+                                />
+                            </StyledStack>
+                        </ListItem>
+                    )}
                 </List>
             </Container>
         </>

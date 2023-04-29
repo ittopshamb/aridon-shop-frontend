@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import {List, ListItem, ListItemText, Collapse, Button, styled} from "@mui/material";
+import {List, ListItem, ListItemText, Collapse, Button, styled, Typography} from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import api from "../Api";
@@ -87,6 +87,9 @@ const CategoriesPage = () => {
     
     return (
         <div>
+            <Typography variant="h4" gutterBottom>
+                Каталог
+            </Typography>
             {isAdmin && (
                 <div>
                     <Link to={`/ParentCategoriesAdd`}>
