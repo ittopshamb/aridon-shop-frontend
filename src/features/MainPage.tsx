@@ -77,7 +77,7 @@ const MainPage = () => {
                 }
             })}
         </Container>
-        <List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', bottom: '40px', width: '100%', left: '85%', transform: 'translateX(-50%)'}}>
+        <List sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', position: 'relative', bottom: '20px', width: '100%', left: '85%', transform: 'translateX(-50%)'}}>
             <ListItem>
                 <StyledStack spacing={2}>
                     <Pagination
